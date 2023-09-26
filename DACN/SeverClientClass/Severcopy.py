@@ -12,6 +12,7 @@ class Server:
         self.counter = 0
         self.drone_queue = Queue
         self.drone_connection_string = "tcp:127.0.0.1:5762"
+        # self.drone_connection_string = "COM10"
         self.drone_baudrate = 9600
         self.client_connected = False
         self.drone_connected = False
@@ -29,13 +30,13 @@ class Server:
         self.client_connected = True
         print("Connected to client:", client_addr)
         self.drone = MyMAVlink(connection_string= self.drone_connection_string, baudrate= self.drone_baudrate, queue= self.drone_queue)
-        if self.drone.connection_status == ProgressStatus.OK:
-            self.drone_connected = True
-            connection_response = "Connected to drone"
-            client_conn.sendall(connection_response.encode())
-        elif self.drone.connection_status == ProgressStatus.ERROR:
-            connection_response = "Can't connect to drone"
-            client_conn.sendall(connection_response.encode())
+        while True:
+            if self.drone.connection_status == ProgressStatus.OK:
+                self.drone_connected = True
+                print("Drone connected")
+                break
+            print("Can't connect to drone\n")
+            time.sleep(1)
         while True:
             data = client_conn.recv(8192)
             if not data:

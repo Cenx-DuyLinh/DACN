@@ -54,7 +54,7 @@ class Server:
         thread_send_to_drone.start()
 
         thread_receive.join()
-        thread_print.join()
+        thread_send_to_drone.join()
 
 
 
