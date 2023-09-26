@@ -9,7 +9,6 @@ class Server:
     def __init__(self, host, port):
         self.host = host
         self.port = port
-        self.counter = 0
         self.drone_queue = Queue
         self.drone_connection_string = "tcp:127.0.0.1:5762"
         # self.drone_connection_string = "COM10"
@@ -35,27 +34,35 @@ class Server:
                 self.drone_connected = True
                 print("Drone connected")
                 break
-            print("Can't connect to drone\n")
-            time.sleep(1)
+            print("Connecting to drone\n")
+            time.sleep(0.2)
         while True:
             data = client_conn.recv(8192)
             if not data:
                 break
             message, command = data.decode().split("\n")
-            self.counter = self.counter + 1
+            print(type(command))
             self.command_queue.put(command)
-            print(f"Received: {message}, {self.counter}")
-            response = "Hello from server"
+            print(f"Received: {message}, {command}")
+            response = "Command recieved"
             client_conn.sendall(response.encode())
         client_conn.close()
     
     def send_to_drone(self):
+        """
+        Args: 
+        1: ARM
+        2: DISARM
+        """
         while True:
             command = self.command_queue.get()
             if self.command_queue.empty():
                 continue
             print(f"Executing command: {command}")
-            time.sleep(1)
+            if command == "1":
+                self.drone.arm_disarm(1)
+            elif command == "2":
+                self.drone.arm_disarm(0)
             # Perform command execution or call another function here if needed
             # Do some processing or call another function here if needed
     def command_acknowledge(self):
@@ -77,5 +84,10 @@ class Server:
         thread_send_to_drone.join()
         thread_command_acknowledge.join()
 
-
+if __name__ == "__main__":
+    HOST = "127.0.0.1"
+    # HOST = "10.8.0.13"
+    PORT = 2000
+    server = Server(HOST, PORT)
+    server.run()
 
