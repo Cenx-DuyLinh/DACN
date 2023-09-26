@@ -2,6 +2,7 @@ import socket
 import threading
 from queue import Queue
 import time
+from CopterAAVC.Class.MAVlink import MyMAVlink,ProgressStatus
 
 
 class Server:
@@ -9,6 +10,11 @@ class Server:
         self.host = host
         self.port = port
         self.counter = 0
+        self.drone_queue = Queue
+        self.drone_connection_string = "tcp:127.0.0.1:5762"
+        self.drone_baudrate = 9600
+        self.client_connected = False
+        self.drone_connected = False
         self.command_queue = Queue()
         self.setup_server()
 
@@ -20,7 +26,16 @@ class Server:
 
     def receive_and_respond_back_to_sever(self):
         client_conn, client_addr = self.conn.accept()
+        self.client_connected = True
         print("Connected to client:", client_addr)
+        self.drone = MyMAVlink(connection_string= self.drone_connection_string, baudrate= self.drone_baudrate, queue= self.drone_queue)
+        if self.drone.connection_status == ProgressStatus.OK:
+            self.drone_connected = True
+            connection_response = "Connected to drone"
+            client_conn.sendall(connection_response.encode())
+        elif self.drone.connection_status == ProgressStatus.ERROR:
+            connection_response = "Can't connect to drone"
+            client_conn.sendall(connection_response.encode())
         while True:
             data = client_conn.recv(8192)
             if not data:
@@ -32,7 +47,7 @@ class Server:
             response = "Hello from server"
             client_conn.sendall(response.encode())
         client_conn.close()
-
+    
     def send_to_drone(self):
         while True:
             command = self.command_queue.get()
@@ -42,23 +57,24 @@ class Server:
             time.sleep(1)
             # Perform command execution or call another function here if needed
             # Do some processing or call another function here if needed
-
+    def command_acknowledge(self):
+        pass
     def run(self):
         thread_receive = threading.Thread(
             target=self.receive_and_respond_back_to_sever, daemon=True
         )
-        thread_print = threading.Thread(target=self.send_to_drone, daemon=True)
+        thread_send_to_drone = threading.Thread(target=self.send_to_drone, daemon=True)
+        thread_command_acknowledge = threading.Thread(target=self.command_acknowledge, daemon=True)
 
         thread_receive.start()
-        thread_print.start()
+        while not self.client_connected and not self.drone_connected:
+            time.sleep(0.1)
+        thread_command_acknowledge.start()
+        thread_send_to_drone.start()
 
         thread_receive.join()
-        thread_print.join()
+        thread_send_to_drone.join()
+        thread_command_acknowledge.join()
 
 
-if __name__ == "__main__":
-    HOST = "127.0.0.1"
-    # HOST = "10.8.0.13"
-    PORT = 2000
-    server = Server(HOST, PORT)
-    server.run()
+
