@@ -10,8 +10,8 @@ class Server:
         self.host = host
         self.port = port
         self.drone_queue = Queue
-        self.drone_connection_string = "tcp:127.0.0.1:5762"
-        # self.drone_connection_string = "COM10"
+        # self.drone_connection_string = "tcp:127.0.0.1:5762"
+        self.drone_connection_string = "COM10"
         self.drone_baudrate = 9600
         self.client_connected = False
         self.drone_connected = False
@@ -25,7 +25,7 @@ class Server:
         print("Listening for connections...")
 
     def receive_and_respond_back_to_sever(self):
-        client_conn, client_addr = self.conn.accept()
+        self.client_conn, client_addr = self.conn.accept()
         self.client_connected = True
         print("Connected to client:", client_addr)
         self.drone = MyMAVlink(connection_string= self.drone_connection_string, baudrate= self.drone_baudrate, queue= self.drone_queue)
@@ -37,32 +37,48 @@ class Server:
             print("Connecting to drone\n")
             time.sleep(0.2)
         while True:
-            data = client_conn.recv(8192)
+            data = self.client_conn.recv(100)
             if not data:
                 break
             message, command = data.decode().split("\n")
-            print(type(command))
             self.command_queue.put(command)
             print(f"Received: {message}, {command}")
             response = "Command recieved"
-            client_conn.sendall(response.encode())
-        client_conn.close()
+            self.client_conn.sendall(response.encode())
+        self.client_conn.close()
     
     def send_to_drone(self):
         """
         Args: 
         1: ARM
         2: DISARM
+        3: LEFT
+        4: RIGHT
+        5: UP
+        6: DOWN
+        7: FORWARD
+        8: BACKWARD
         """
         while True:
             command = self.command_queue.get()
-            if self.command_queue.empty():
-                continue
             print(f"Executing command: {command}")
             if command == "1":
                 self.drone.arm_disarm(1)
+                start_time = time.perf_counter_ns()
+                data = self.drone.command_acknowledge()
+                
+                if data:
+                    delay = (time.perf_counter_ns() - start_time)/2/1e9
+                    print(f"The delay of command {command} to drone: {delay}")
+
             elif command == "2":
                 self.drone.arm_disarm(0)
+                start_time = time.perf_counter_ns()
+                data = self.drone.command_acknowledge()
+                
+                if data:
+                    delay = (time.perf_counter_ns() - start_time)/2/1e9
+                    print(f"The delay of command {command} to drone: {delay}")
             # Perform command execution or call another function here if needed
             # Do some processing or call another function here if needed
     def command_acknowledge(self):
@@ -75,7 +91,7 @@ class Server:
         thread_command_acknowledge = threading.Thread(target=self.command_acknowledge, daemon=True)
 
         thread_receive.start()
-        while not self.client_connected and not self.drone_connected:
+        while not self.client_connected or not self.drone_connected:
             time.sleep(0.1)
         thread_command_acknowledge.start()
         thread_send_to_drone.start()

@@ -16,12 +16,12 @@ class Client:
         self.window = tk.Tk()
         self.window.title("Client")
 
-        button_left = tk.Button(self.window, text="Left")
-        button_right = tk.Button(self.window, text="Right")
-        button_forward = tk.Button(self.window, text="Forward")
-        button_backward = tk.Button(self.window, text="Backward")
-        button_up = tk.Button(self.window, text="Up")
-        button_down = tk.Button(self.window, text="Down")
+        button_left = tk.Button(self.window, text="Left", command= lambda:self.command_queue.put(3))
+        button_right = tk.Button(self.window, text="Right", command= lambda:self.command_queue.put(4))
+        button_forward = tk.Button(self.window, text="Forward", command= lambda:self.command_queue.put(7))
+        button_backward = tk.Button(self.window, text="Backward", command= lambda:self.command_queue.put(8))
+        button_up = tk.Button(self.window, text="Up", command= lambda:self.command_queue.put(5))
+        button_down = tk.Button(self.window, text="Down", command= lambda:self.command_queue.put(6))
         button_arm = tk.Button(self.window, text="Arm", command= lambda:self.command_queue.put(1))
         button_disarm = tk.Button(self.window, text="Disarm",command=lambda:self.command_queue.put(2))
 
@@ -44,6 +44,12 @@ class Client:
         Args: 
         1: ARM
         2: DISARM
+        3: LEFT
+        4: RIGHT
+        5: UP
+        6: DOWN
+        7: FORWARD
+        8: BACKWARD
         """
         while True:
             if not self.command_queue.empty():
@@ -52,9 +58,9 @@ class Client:
                 self.conn.sendall(message.encode())
                 time_send = time.perf_counter_ns()
                 print("Sent:", message)
-                response = self.conn.recv(8192)
+                response = self.conn.recv(100)
                 time_recv = time.perf_counter_ns()
-                delay = ((time_recv - time_send) / 2) / 10**9
+                delay = ((time_recv - time_send) / 2) / 1e9
                 message = response.decode()
                 print(f"Received: {message}, Delay: {delay} s")
 
