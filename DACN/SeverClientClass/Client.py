@@ -74,8 +74,8 @@ class Client:
 
 
 if __name__ == "__main__":
-    HOST = "127.0.0.1"
-    # HOST = "10.8.0.13"
+    # HOST = "127.0.0.1"
+    HOST = "10.8.0.62"
     PORT = 2000
     client = Client(HOST, PORT)
     client.run()

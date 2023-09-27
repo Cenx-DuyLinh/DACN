@@ -62,8 +62,23 @@ class Server:
         while True:
             command = self.command_queue.get()
             print(f"Executing command: {command}")
+            self.distant_to_move = 0.5
             if command == "1":
                 self.drone.arm_disarm(1)
+            elif command == "2":
+                self.drone.arm_disarm(2)
+            elif command == "3":
+                self.drone.set_frame_position([0, -self.distant_to_move, 0])
+            elif command == "4":
+                self.drone.set_frame_position([0,self.distant_to_move,0])
+            elif command == "5":
+                self.drone.set_frame_position([0,0,self.distant_to_move])
+            elif command == "6":
+                self.drone.set_frame_position([0,0,-self.distant_to_move])
+            elif command == "7":
+                self.drone.set_frame_position([self.distant_to_move,0,0])
+            elif command == "8":
+                self.drone.set_frame_position([-self.distant_to_move,0,0])
                 start_time = time.perf_counter_ns()
                 data = self.drone.command_acknowledge()
                 
@@ -71,14 +86,6 @@ class Server:
                     delay = (time.perf_counter_ns() - start_time)/2/1e9
                     print(f"The delay of command {command} to drone: {delay}")
 
-            elif command == "2":
-                self.drone.arm_disarm(0)
-                start_time = time.perf_counter_ns()
-                data = self.drone.command_acknowledge()
-                
-                if data:
-                    delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    print(f"The delay of command {command} to drone: {delay}")
             # Perform command execution or call another function here if needed
             # Do some processing or call another function here if needed
     def command_acknowledge(self):
