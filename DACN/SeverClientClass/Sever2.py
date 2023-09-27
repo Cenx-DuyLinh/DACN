@@ -82,52 +82,16 @@ class Server:
                     print(f"The delay of command {command} to drone: {delay}")
             elif command == "3":
                 self.drone.set_frame_position([0, -self.distant_to_move, 0])
-                start_time = time.perf_counter_ns()
-                data = self.drone.command_acknowledge()
-                
-                if data:
-                    delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    print(f"The delay of command {command} to drone: {delay}")
             elif command == "4":
                 self.drone.set_frame_position([0,self.distant_to_move,0])
-                start_time = time.perf_counter_ns()
-                data = self.drone.command_acknowledge()
-                
-                if data:
-                    delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    print(f"The delay of command {command} to drone: {delay}")
             elif command == "5":
                 self.drone.set_frame_position([0,0,-self.distant_to_move])
-                start_time = time.perf_counter_ns()
-                data = self.drone.command_acknowledge()
-                
-                if data:
-                    delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    print(f"The delay of command {command} to drone: {delay}")
             elif command == "6":
                 self.drone.set_frame_position([0,0,self.distant_to_move])
-                start_time = time.perf_counter_ns()
-                data = self.drone.command_acknowledge()
-                
-                if data:
-                    delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    print(f"The delay of command {command} to drone: {delay}")
             elif command == "7":
                 self.drone.set_frame_position([self.distant_to_move,0,0])
-                start_time = time.perf_counter_ns()
-                data = self.drone.command_acknowledge()
-                
-                if data:
-                    delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    print(f"The delay of command {command} to drone: {delay}")
             elif command == "8":
                 self.drone.set_frame_position([-self.distant_to_move,0,0])
-                start_time = time.perf_counter_ns()
-                data = self.drone.command_acknowledge()
-                
-                if data:
-                    delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    print(f"The delay of command {command} to drone: {delay}")
             elif command == "9":
                 self.drone.set_mode(4)
                 start_time = time.perf_counter_ns()
