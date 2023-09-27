@@ -6,12 +6,11 @@ from CopterAAVC.Class.MAVlink import MyMAVlink,ProgressStatus
 
 
 class Server:
-    def __init__(self, host, port):
+    def __init__(self, host, port,connection_object):
+        self.drone_connection_string = connection_object
         self.host = host
         self.port = port
         self.drone_queue = Queue
-        # self.drone_connection_string = "tcp:127.0.0.1:5762"
-        self.drone_connection_string = "COM10"
         self.drone_baudrate = 9600
         self.client_connected = False
         self.drone_connected = False
@@ -58,27 +57,87 @@ class Server:
         6: DOWN
         7: FORWARD
         8: BACKWARD
+        9: SWITCH TO GUIDED
+        10: TAKE OFF
         """
         while True:
             command = self.command_queue.get()
             print(f"Executing command: {command}")
-            self.distant_to_move = 0.5
+            self.distant_to_move = 2
             if command == "1":
                 self.drone.arm_disarm(1)
+                start_time = time.perf_counter_ns()
+                data = self.drone.command_acknowledge()
+                
+                if data:
+                    delay = (time.perf_counter_ns() - start_time)/2/1e9
+                    print(f"The delay of command {command} to drone: {delay}")
             elif command == "2":
-                self.drone.arm_disarm(2)
+                self.drone.arm_disarm(0)
+                start_time = time.perf_counter_ns()
+                data = self.drone.command_acknowledge()
+                
+                if data:
+                    delay = (time.perf_counter_ns() - start_time)/2/1e9
+                    print(f"The delay of command {command} to drone: {delay}")
             elif command == "3":
                 self.drone.set_frame_position([0, -self.distant_to_move, 0])
+                start_time = time.perf_counter_ns()
+                data = self.drone.command_acknowledge()
+                
+                if data:
+                    delay = (time.perf_counter_ns() - start_time)/2/1e9
+                    print(f"The delay of command {command} to drone: {delay}")
             elif command == "4":
                 self.drone.set_frame_position([0,self.distant_to_move,0])
+                start_time = time.perf_counter_ns()
+                data = self.drone.command_acknowledge()
+                
+                if data:
+                    delay = (time.perf_counter_ns() - start_time)/2/1e9
+                    print(f"The delay of command {command} to drone: {delay}")
             elif command == "5":
-                self.drone.set_frame_position([0,0,self.distant_to_move])
-            elif command == "6":
                 self.drone.set_frame_position([0,0,-self.distant_to_move])
+                start_time = time.perf_counter_ns()
+                data = self.drone.command_acknowledge()
+                
+                if data:
+                    delay = (time.perf_counter_ns() - start_time)/2/1e9
+                    print(f"The delay of command {command} to drone: {delay}")
+            elif command == "6":
+                self.drone.set_frame_position([0,0,self.distant_to_move])
+                start_time = time.perf_counter_ns()
+                data = self.drone.command_acknowledge()
+                
+                if data:
+                    delay = (time.perf_counter_ns() - start_time)/2/1e9
+                    print(f"The delay of command {command} to drone: {delay}")
             elif command == "7":
                 self.drone.set_frame_position([self.distant_to_move,0,0])
+                start_time = time.perf_counter_ns()
+                data = self.drone.command_acknowledge()
+                
+                if data:
+                    delay = (time.perf_counter_ns() - start_time)/2/1e9
+                    print(f"The delay of command {command} to drone: {delay}")
             elif command == "8":
                 self.drone.set_frame_position([-self.distant_to_move,0,0])
+                start_time = time.perf_counter_ns()
+                data = self.drone.command_acknowledge()
+                
+                if data:
+                    delay = (time.perf_counter_ns() - start_time)/2/1e9
+                    print(f"The delay of command {command} to drone: {delay}")
+            elif command == "9":
+                self.drone.set_mode(4)
+                start_time = time.perf_counter_ns()
+                data = self.drone.command_acknowledge()
+                
+                if data:
+                    delay = (time.perf_counter_ns() - start_time)/2/1e9
+                    print(f"The delay of command {command} to drone: {delay}")
+            elif command == "10":
+                self.drone.take_off(10)
                 start_time = time.perf_counter_ns()
                 data = self.drone.command_acknowledge()
                 
