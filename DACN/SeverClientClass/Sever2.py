@@ -23,7 +23,7 @@ class Server:
         self.conn.listen()
         print("Listening for connections...")
 
-    def receive_and_respond_back_to_sever(self):
+    def receive_and_respond_back_to_client(self):
         self.client_conn, client_addr = self.conn.accept()
         self.client_connected = True
         print("Connected to client:", client_addr)
@@ -63,7 +63,7 @@ class Server:
         while True:
             command = self.command_queue.get()
             print(f"Executing command: {command}")
-            self.distant_to_move = 2
+            self.distant_to_move = 10 
             if command == "1":
                 self.drone.arm_disarm(1)
                 start_time = time.perf_counter_ns()
@@ -108,14 +108,14 @@ class Server:
                 if data:
                     delay = (time.perf_counter_ns() - start_time)/2/1e9
                     print(f"The delay of command {command} to drone: {delay}")
-
+            time.sleep(0.01)
             # Perform command execution or call another function here if needed
             # Do some processing or call another function here if needed
     def command_acknowledge(self):
         pass
     def run(self):
         thread_receive = threading.Thread(
-            target=self.receive_and_respond_back_to_sever, daemon=True
+            target=self.receive_and_respond_back_to_client, daemon=True
         )
         thread_send_to_drone = threading.Thread(target=self.send_to_drone, daemon=True)
         thread_command_acknowledge = threading.Thread(target=self.command_acknowledge, daemon=True)

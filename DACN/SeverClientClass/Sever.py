@@ -68,7 +68,7 @@ class Server:
         thread_command_acknowledge = threading.Thread(target=self.command_acknowledge, daemon=True)
 
         thread_receive.start()
-        while not self.client_connected and not self.drone_connected:
+        while not self.client_connected or not self.drone_connected:
             time.sleep(0.1)
         thread_command_acknowledge.start()
         thread_send_to_drone.start()
