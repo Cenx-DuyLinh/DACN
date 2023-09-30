@@ -1,8 +1,8 @@
 from SeverClientClass.Client import *
 
 if __name__ == "__main__":
-    HOST = "127.0.0.1"
-    # HOST = "10.8.0.13"
+    HOST_SELF = "127.0.0.1"
+    HOST_CLIENT = "10.8.0.9"
     PORT = 2000
-    client = Client(HOST, PORT)
+    client = Client(HOST_CLIENT, PORT)
     client.run()
