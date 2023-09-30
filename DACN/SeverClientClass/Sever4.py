@@ -23,24 +23,49 @@ class Server:
         self.conn.listen()
         print("Listening for connections...")
 
+
+    def connect_to_drone(self):
+        try:
+            self.drone = MyMAVlink(
+                connection_string=self.drone_connection_string,
+                baudrate=self.drone_baudrate,
+                queue=self.drone_queue
+            )
+
+            if self.drone.connection_status == ProgressStatus.OK:
+                    self.drone_connected = True
+                    print("Drone connected\n")
+            else:
+                print("Failed to connect to the drone\n")
+
+        except ConnectionRefusedError:
+            print("Unable to establish a connection to the drone. Make sure it's running and accessible.\n")
+
     def receive_and_respond_back_to_client(self):
         while True:
             self.client_conn, client_addr = self.conn.accept()
             self.client_connected = True
             print("Connected to client:", client_addr)
 
+            drone_connection_thread = threading.Thread(target=self.connect_to_drone)
+            drone_connection_thread.start()
+
             try:
-                while True:
-                    data = self.client_conn.recv(100)
-                    if not data:
-                        break
+                drone_connection_thread.join(5)  # Wait for 5 seconds for the thread to complete
+                if self.drone_connected:
+                    while True:
+                        data = self.client_conn.recv(100)
+                        if not data:
+                            break
 
-                    message, command = data.decode().split("\n")
-                    self.command_queue.put(command)
-                    print(f"Received: {message}, {command}")
-                    response = "Command received"
-                    self.client_conn.sendall(response.encode())
+                        message, command = data.decode().split("\n")
+                        self.command_queue.put(command)
+                        print(f"Received: {message}, {command}")
+                        response = "Command received"
+                        self.client_conn.sendall(response.encode())
 
+                else:
+                    print("Drone connection failed, aborting client communication")
             except ConnectionResetError:
                 print("Client connection reset by peer")
             finally:

@@ -1,4 +1,4 @@
-from SeverClientClass.Sever2copy import *
+from DACN.SeverClientClass.Sever4 import *
 
 if __name__ == "__main__":
     HOST_SELF = "127.0.0.1"
@@ -7,5 +7,5 @@ if __name__ == "__main__":
     DRONE= "COM10"
     
     PORT = 2000
-    server = Server(HOST_SEVER, PORT,SITL)
+    server = Server(HOST_SELF, PORT,SITL)
     server.run()
