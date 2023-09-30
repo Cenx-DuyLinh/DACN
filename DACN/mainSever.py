@@ -7,5 +7,5 @@ if __name__ == "__main__":
     DRONE= "COM10"
     
     PORT = 2000
-    server = Server(HOST_SEVER, PORT,SITL)
+    server = Server(HOST, PORT,SITL)
     server.run()
