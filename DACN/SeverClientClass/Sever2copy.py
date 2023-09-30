@@ -28,26 +28,25 @@ class Server:
             self.client_conn, client_addr = self.conn.accept()
             self.client_connected = True
             print("Connected to client:", client_addr)
-            # self.drone = MyMAVlink(connection_string= self.drone_connection_string, baudrate= self.drone_baudrate, queue= self.drone_queue)
-            # while True:
-            #     if self.drone.connection_status == ProgressStatus.OK:
-            #         self.drone_connected = True
-            #         print("Drone connected")
-            #         break
-            #     print("Connecting to drone\n")
-            #     time.sleep(0.2)
-            while True:
-                data = self.client_conn.recv(100)
-                if not data:
-                    break
-                message, command = data.decode().split("\n")
-                self.command_queue.put(command)
-                print(f"Received: {message}, {command}")
-                response = "Command recieved"
-                self.client_conn.sendall(response.encode())
-            self.client_conn.close()
-            self.client_connected = False
-            print("return to listening")
+
+            try:
+                while True:
+                    data = self.client_conn.recv(100)
+                    if not data:
+                        break
+
+                    message, command = data.decode().split("\n")
+                    self.command_queue.put(command)
+                    print(f"Received: {message}, {command}")
+                    response = "Command received"
+                    self.client_conn.sendall(response.encode())
+
+            except ConnectionResetError:
+                print("Client connection reset by peer")
+            finally:
+                self.client_conn.close()
+                self.client_connected = False
+                print("Client disconnected, returning to listen for connections...")
     
     def send_to_drone(self):
         """
