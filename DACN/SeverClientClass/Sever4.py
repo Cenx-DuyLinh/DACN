@@ -11,7 +11,7 @@ class Server:
         self.host = host
         self.port = port
         self.drone_queue = Queue
-        self.drone_baudrate = 9600
+        self.drone_baudrate = 921600
         self.client_connected = False
         self.drone_connected = False
         self.command_queue = Queue()
@@ -135,6 +135,7 @@ class Server:
                 if data:
                     delay = (time.perf_counter_ns() - start_time)/2/1e9
                     print(f"The delay of command {command} to drone: {delay}")
+        
             time.sleep(0.01)
             # Perform command execution or call another function here if needed
             # Do some processing or call another function here if needed
