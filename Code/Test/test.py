@@ -5,5 +5,7 @@ camera = PiCamera()
 camera.resolution = (1024, 768)
 camera.start_preview()
 # Camera warm-up time
-sleep(2)
-camera.capture('foo.jpg')
+sleep(5)
+while True:
+    camera.capture('foo.jpg')
+    sleep(0.5)

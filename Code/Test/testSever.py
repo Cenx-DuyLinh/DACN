@@ -1,41 +1,34 @@
 import io
-import picamera
 import socket
+import struct
+from PIL import Image
 
-# Create a socket object
+# Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
+# all interfaces)
 server_socket = socket.socket()
-server_socket.bind(('10.8.0.13', 8000))
+server_socket.bind(('0.0.0.0', 8000))
 server_socket.listen(0)
 
-# Accept a single client connection
-client_socket, address = server_socket.accept()
-
-# Create a bytes-like object as a stream for the PiCamera
-stream = io.BytesIO()
-
-# Create a PiCamera object
-camera = picamera.PiCamera()
-
-# Set camera resolution (optional)
-camera.resolution = (640, 480)
-
-# Start the video capture
-camera.start_recording(stream, format='h264')
-
+# Accept a single connection and make a file-like object out of it
+connection = server_socket.accept()[0].makefile('rb')
 try:
     while True:
-        # Capture video frames continuously
-        camera.wait_recording(0)
-
-        # Send the current frame to the client
-        client_socket.sendall(stream.getvalue())
-
-        # Reset the stream for the next frame
-        stream.seek(0)
-        stream.truncate()
-
+        # Read the length of the image as a 32-bit unsigned int. If the
+        # length is zero, quit the loop
+        image_len = struct.unpack('<L', connection.read(struct.calcsize('<L')))[0]
+        if not image_len:
+            break
+        # Construct a stream to hold the image data and read the image
+        # data from the connection
+        image_stream = io.BytesIO()
+        image_stream.write(connection.read(image_len))
+        # Rewind the stream, open it as an image with PIL and do some
+        # processing on it
+        image_stream.seek(0)
+        image = Image.open(image_stream)
+        print('Image is %dx%d' % image.size)
+        image.verify()
+        print('Image is verified')
 finally:
-    # Clean up resources
-    camera.stop_recording()
-    client_socket.close()
+    connection.close()
     server_socket.close()
