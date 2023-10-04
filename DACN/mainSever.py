@@ -9,5 +9,6 @@ if __name__ == "__main__":
     DRONE_PIX = "/dev/serial0"
     
     PORT = 2000
-    server = Server(HOST_SEVER, PORT,DRONE_PIX)
+    PORT_CAM = 2001
+    server = Server(HOST_SEVER, PORT,PORT_CAM,DRONE_PIX)
     server.run()

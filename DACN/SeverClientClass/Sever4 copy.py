@@ -15,16 +15,26 @@ class Server:
         self.drone_baudrate = 921600
         self.client_connected = False
         self.drone_connected = False
+        self.cam_pi_connected = False
         self.command_queue = Queue()
         self.setup_server()
 
     def setup_server(self):
-        self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.conn.bind((self.host, self.port))
-        self.conn.listen()
-        print("Listening for connections...")
+        self.conn_server_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.conn_pi = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+        self.conn_server_client.bind((self.host, self.port))
+        self.conn_pi.bind((self.host, self.port_cam))
 
+        self.conn_server_client.listen()
+        self.conn_pi.listen()
+
+        print("Listening for connections on server and camera...")
+
+    def cam_pi(self):
+        pass  
+    def stream_to_client(self,frame):
+        pass
     def connect_to_drone(self):
         try:
             self.drone = MyMAVlink(
@@ -41,10 +51,9 @@ class Server:
 
         except ConnectionRefusedError:
             print("Unable to establish a connection to the drone. Make sure it's running and accessible.\n")
-
-    def receive_and_respond_back_to_client(self):
+    def receive_command_from_client(self):
         while True:
-            self.client_conn, client_addr = self.conn.accept()
+            self.client_conn, client_addr = self.conn_server_client.accept()
             self.client_connected = True
             print("Connected to client:", client_addr)
 
@@ -72,21 +81,21 @@ class Server:
             finally:
                 self.client_conn.close()
                 self.client_connected = False
-                print("Client disconnected, returning to listen for connections...")
-    
+                print("Client disconnected, returning to listen for connections...")   
     def send_to_drone(self):
         """
         Args: 
-        1: ARM
-        2: DISARM
-        3: LEFT
-        4: RIGHT
-        5: UP
-        6: DOWN
-        7: FORWARD
-        8: BACKWARD
-        9: SWITCH TO GUIDED
+        01: ARM        11: AUTO 
+        02: DISARM
+        03: LEFT
+        04: RIGHT
+        05: UP
+        06: DOWN
+        07: FORWARD
+        08: BACKWARD
+        09: GUIDED
         10: TAKE OFF
+        
         """
         while True:
             command = self.command_queue.get()
@@ -99,7 +108,10 @@ class Server:
                 
                 if data:
                     delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    print(f"The delay of command {command} to drone: {delay}")
+                    if delay > 1: 
+                        print (f"Command {command} got timeout ")
+                    else :
+                        print(f"The delay of command {command} to drone: {delay}")
             elif command == "2":
                 self.drone.arm_disarm(0)
                 start_time = time.perf_counter_ns()
@@ -107,7 +119,10 @@ class Server:
                 
                 if data:
                     delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    print(f"The delay of command {command} to drone: {delay}")
+                    if delay > 1: 
+                        print (f"Command {command} got timeout ")
+                    else :
+                        print(f"The delay of command {command} to drone: {delay}")
             elif command == "3":
                 self.drone.set_frame_position([0, -self.distant_to_move, 0])
             elif command == "4":
@@ -135,34 +150,28 @@ class Server:
                 
                 if data:
                     delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    print(f"The delay of command {command} to drone: {delay}")
+                    if delay > 1: 
+                        print (f"Command {command} got timeout ")
+                    else :
+                        print(f"The delay of command {command} to drone: {delay}")
         
             time.sleep(0.01)
-            # Perform command execution or call another function here if needed
-            # Do some processing or call another function here if needed
-    def command_acknowledge(self):
-        pass
+            
     def run(self):
-        thread_receive = threading.Thread(
-            target=self.receive_and_respond_back_to_client, daemon=True
-        )
+        thread_receive = threading.Thread(target=self.receive_command_from_client, daemon=True)
         thread_send_to_drone = threading.Thread(target=self.send_to_drone, daemon=True)
-        thread_command_acknowledge = threading.Thread(target=self.command_acknowledge, daemon=True)
+        thread_cam_pi = threading.Thread(target=self.cam_pi, daemon=True)
 
         thread_receive.start()
-        while not self.client_connected or not self.drone_connected:
+
+        while not self.client_connected or not self.drone_connected or not self.cam_pi_connected:
             time.sleep(0.1)
-        thread_command_acknowledge.start()
+
         thread_send_to_drone.start()
 
         thread_receive.join()
         thread_send_to_drone.join()
-        thread_command_acknowledge.join()
+        thread_cam_pi.join()
 
-if __name__ == "__main__":
-    HOST = "127.0.0.1"
-    # HOST = "10.8.0.13"
-    PORT = 2000
-    server = Server(HOST, PORT)
-    server.run()
+
 
