@@ -1,41 +1,86 @@
-import io
-import picamera
-import socket
+# import io
+# import socket
+# import struct
+# from PIL import Image
 
-# Create a socket object
+# # Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
+# # all interfaces)
+# server_socket = socket.socket()
+# server_socket.bind(('10.8.0.13', 8000))
+# server_socket.listen(0)
+# print("listening on")
+
+# # Accept a single connection and make a file-like object out of it
+# connection = server_socket.accept()[0].makefile('rb')
+# try:
+#     while True:
+#         # Read the length of the image as a 32-bit unsigned int. If the
+#         # length is zero, quit the loop
+#         image_len = struct.unpack('<L', connection.read(struct.calcsize('<L')))[0]
+#         if not image_len:
+#             break
+#         # Construct a stream to hold the image data and read the image
+#         # data from the connection
+#         image_stream = io.BytesIO()
+#         image_stream.write(connection.read(image_len))
+#         # Rewind the stream, open it as an image with PIL and do some
+#         # processing on it
+#         image_stream.seek(0)
+#         image = Image.open(image_stream)
+#         print('Image is %dx%d' % image.size)
+#         image.verify()
+#         print('Image is verified')
+# finally:
+#     connection.close()
+#     server_socket.close()
+import io
+import socket
+import struct
+from PIL import Image
+import tkinter as tk
+from PIL import ImageTk
+
+# Create a Tkinter window
+window = tk.Tk()
+
+# Create a Canvas widget to display the image
+canvas = tk.Canvas(window, width=640, height=480)
+canvas.pack()
+
+# Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means all interfaces)
 server_socket = socket.socket()
 server_socket.bind(('10.8.0.13', 8000))
 server_socket.listen(0)
+print("Listening on")
 
-# Accept a single client connection
-client_socket, address = server_socket.accept()
-
-# Create a bytes-like object as a stream for the PiCamera
-stream = io.BytesIO()
-
-# Create a PiCamera object
-camera = picamera.PiCamera()
-
-# Set camera resolution (optional)
-camera.resolution = (640, 480)
-
-# Start the video capture
-camera.start_recording(stream, format='h264')
+# Accept a single connection and make a file-like object out of it
+connection = server_socket.accept()[0].makefile('rb')
 
 try:
     while True:
-        # Capture video frames continuously
-        camera.wait_recording(0)
+        # Read the length of the image as a 32-bit unsigned int. If the
+        # length is zero, quit the loop
+        image_len = struct.unpack('<L', connection.read(struct.calcsize('<L')))[0]
+        if not image_len:
+            break
+        
+        # Construct a stream to hold the image data and read the image
+        # data from the connection
+        image_stream = io.BytesIO()
+        image_stream.write(connection.read(image_len))
 
-        # Send the current frame to the client
-        client_socket.sendall(stream.getvalue())
+        # Rewind the stream, open it as an image with PIL, and convert to PhotoImage
+        image_stream.seek(0)
+        image = Image.open(image_stream)
+        photo = ImageTk.PhotoImage(image)
 
-        # Reset the stream for the next frame
-        stream.seek(0)
-        stream.truncate()
+        # Update the image on the Canvas
+        canvas.create_image(0, 0, anchor=tk.NW, image=photo)
+        window.update_idletasks()  # Update the Tkinter window
 
 finally:
-    # Clean up resources
-    camera.stop_recording()
-    client_socket.close()
+    connection.close()
     server_socket.close()
+
+# Start the Tkinter main loop
+window.mainloop()

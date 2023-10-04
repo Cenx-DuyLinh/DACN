@@ -5,7 +5,7 @@ import socket
 
 # Create a socket object and connect to the server
 client_socket = socket.socket()
-client_socket.connect(('10.8.0.13', 8000))
+client_socket.connect(('10.8.0.9', 8000))
 
 # Create a Tkinter window
 window = tk.Tk()
