@@ -30,7 +30,6 @@ class Server:
         self.conn_pi.listen()
 
         print("Listening for connections on server and camera...")
-
     def cam_pi(self):
         pass  
     def stream_to_client(self,frame):
@@ -82,11 +81,35 @@ class Server:
                 self.client_conn.close()
                 self.client_connected = False
                 print("Client disconnected, returning to listen for connections...")   
+    def calculate_delay(self,command,data):
+        """Data Args:
+        01: CMD_ACK
+        02: NED_ACK
+        """
+        if data == 1:
+            start_time = time.perf_counter_ns()
+            confirm = self.drone.command_acknowledge()
+            if confirm:
+                delay = (time.perf_counter_ns() - start_time)/2/1e9
+                if delay > 1: 
+                    print (f"Command {command} got timeout \n--------------------------------")
+                else :
+                    print(f"The delay of command {command} to drone: {delay}\n--------------------------------")
+        if data == 2:
+            start_time = time.perf_counter_ns()
+            data,confirm = self.drone.get_ned_ack()
+            if confirm:
+                delay = (time.perf_counter_ns() - start_time)/2/1e9
+                print (f"Status: {data} \nThe delay of command {command} to drone: {delay}\n--------------------------------")
+            else :
+                print(f"Command {command} got timeout \n--------------------------------")
+
+        pass
     def send_to_drone(self):
         """
         Args: 
         01: ARM        11: AUTO 
-        02: DISARM
+        02: DISARM     12: STOP
         03: LEFT
         04: RIGHT
         05: UP
@@ -100,62 +123,41 @@ class Server:
         while True:
             command = self.command_queue.get()
             print(f"Executing command: {command}")
-            self.distant_to_move = 10 
+            self.distant_to_move = 3
             if command == "1":
                 self.drone.arm_disarm(1)
-                start_time = time.perf_counter_ns()
-                data = self.drone.command_acknowledge()
-                
-                if data:
-                    delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    if delay > 1: 
-                        print (f"Command {command} got timeout ")
-                    else :
-                        print(f"The delay of command {command} to drone: {delay}")
+                self.calculate_delay("1",1)
             elif command == "2":
                 self.drone.arm_disarm(0)
-                start_time = time.perf_counter_ns()
-                data = self.drone.command_acknowledge()
-                
-                if data:
-                    delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    if delay > 1: 
-                        print (f"Command {command} got timeout ")
-                    else :
-                        print(f"The delay of command {command} to drone: {delay}")
+                self.calculate_delay("2",1)
             elif command == "3":
                 self.drone.set_frame_position([0, -self.distant_to_move, 0])
+                self.calculate_delay("3",2)
             elif command == "4":
                 self.drone.set_frame_position([0,self.distant_to_move,0])
+                self.calculate_delay("4",2)
             elif command == "5":
                 self.drone.set_frame_position([0,0,-self.distant_to_move])
+                self.calculate_delay("5",2)
             elif command == "6":
                 self.drone.set_frame_position([0,0,self.distant_to_move])
+                self.calculate_delay("6",2)
             elif command == "7":
                 self.drone.set_frame_position([self.distant_to_move,0,0])
+                self.calculate_delay("7",2)
             elif command == "8":
                 self.drone.set_frame_position([-self.distant_to_move,0,0])
+                self.calculate_delay("8",2)
+            elif command == "12":
+                self.drone.set_frame_position([0,0,0])
+                self.calculate_delay("12",2)
             elif command == "9":
                 self.drone.set_mode(4)
-                start_time = time.perf_counter_ns()
-                data = self.drone.command_acknowledge()
-                
-                if data:
-                    delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    print(f"The delay of command {command} to drone: {delay}")
+                self.calculate_delay("9",1)
             elif command == "10":
-                self.drone.take_off(10)
-                start_time = time.perf_counter_ns()
-                data = self.drone.command_acknowledge()
-                
-                if data:
-                    delay = (time.perf_counter_ns() - start_time)/2/1e9
-                    if delay > 1: 
-                        print (f"Command {command} got timeout ")
-                    else :
-                        print(f"The delay of command {command} to drone: {delay}")
-        
-            time.sleep(0.01)
+                self.drone.take_off(self.distant_to_move)
+                self.calculate_delay("10",1)
+    
             
     def run(self):
         thread_receive = threading.Thread(target=self.receive_command_from_client, daemon=True)
@@ -164,7 +166,8 @@ class Server:
 
         thread_receive.start()
 
-        while not self.client_connected or not self.drone_connected or not self.cam_pi_connected:
+        # while not self.client_connected or not self.drone_connected or not self.cam_pi_connected:
+        while not self.client_connected or not self.drone_connected:
             time.sleep(0.1)
 
         thread_send_to_drone.start()

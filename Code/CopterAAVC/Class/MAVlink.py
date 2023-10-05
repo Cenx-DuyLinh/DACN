@@ -35,7 +35,7 @@ class MyMAVlink():
             self.target_component = self.connection.target_component
         elif self.connection_status == ProgressStatus.ERROR:
             raise ConnectionError("Invalid MAVlink connection")
-        
+    
     def wait_for_connection(self, wait_timeout) -> ProgressStatus:
         """
         Sends a ping to stabilish the UDP communication and awaits for a response
@@ -59,7 +59,30 @@ class MyMAVlink():
             return ProgressStatus.OK
         else: 
             return ProgressStatus.ERROR
-    
+    #---------[Phần Lĩnh thêm vào]----------------------------------------------------------------
+    def get_ned_ack(self):
+        time_out = 20
+        timer = 0
+        msg_position_control = None
+        while not msg_position_control:
+            self.connection.mav.command_long_send(
+                self.target_system,
+                self.target_component,
+                mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE,
+                0,
+                85,
+                0, 0, 0, 0, 0, 0
+            )
+            time.sleep(0.1)
+            msg_position_control = self.connection.recv_match(type="POSITION_TARGET_LOCAL_NED", blocking=False)
+            if msg_position_control:
+                msg_position_control =True
+                return f"POSITION_TARGET_LOCAL_NED received",True
+            timer += 1
+            if timer >= time_out:
+                return f"Time out. No POSITION_TARGET_LOCAL_NED received",False
+                
+    #---------------------------------------------------------------------------------------------
     def command_acknowledge(self):
         time_out = 20
         timer = 0

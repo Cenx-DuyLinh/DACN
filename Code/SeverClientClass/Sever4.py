@@ -91,7 +91,7 @@ class Server:
         while True:
             command = self.command_queue.get()
             print(f"Executing command: {command}")
-            self.distant_to_move = 10 
+            self.distant_to_move = 3
             if command == "1":
                 self.drone.arm_disarm(1)
                 start_time = time.perf_counter_ns()
@@ -129,7 +129,7 @@ class Server:
                     delay = (time.perf_counter_ns() - start_time)/2/1e9
                     print(f"The delay of command {command} to drone: {delay}")
             elif command == "10":
-                self.drone.take_off(10)
+                self.drone.take_off(self.distant_to_move)
                 start_time = time.perf_counter_ns()
                 data = self.drone.command_acknowledge()
                 

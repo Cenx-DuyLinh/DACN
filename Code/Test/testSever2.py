@@ -60,7 +60,6 @@ def update_image():
 
     finally:
         connection.close()
-        client_socket.close()
 
 # Start a new thread for image streaming
 thread = threading.Thread(target=update_image)
