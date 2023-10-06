@@ -2,11 +2,16 @@ import socket
 import tkinter as tk
 import threading
 import time
+import logging
 from queue import Queue
 
 
 class Client:
     def __init__(self, host, port):
+        logging.basicConfig(level=logging.DEBUG, filename="Log/ClientLog", filemode="a+",
+                        format="%(asctime)-15s %(levelname)-8s %(message)s")
+        date = time.localtime()
+        logging.info(f"--------------------------[New Run File]--[{date.tm_mday}/{date.tm_mon}/{date.tm_year}]--[{date.tm_hour}:{date.tm_min}]-----------------------------")
         self.host = host
         self.port = port
         self.command_queue = Queue()
@@ -39,11 +44,13 @@ class Client:
     def create_button(self, text, command):
         return tk.Button(self.window, text=text,width=15,height=3,
                          command=lambda: self.command_queue.put(command))
-
+    def print_and_write_log(self,data):
+            print(data)
+            logging.info(data)
     def connect_to_sever(self):
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn.connect((self.host, self.port))
-        print("Connected")
+        self.print_and_write_log("Connected")
 
     def send_message(self):
         while True:
@@ -60,7 +67,7 @@ class Client:
 
                 delay = ((time_recv - time_send) / 2) / 1e9
                 message = response.decode()
-                print(f"Received: {message}\nDelay: {delay}s\n--------------------------------")
+                self.print_and_write_log(f"Received: {message}\nDelay: {delay}s\n--------------------------------")
 
     def start_sending_thread(self):
         thread_send_message = threading.Thread(target=self.send_message, daemon=True)
@@ -71,9 +78,3 @@ class Client:
         self.window.mainloop()
 
 
-if __name__ == "__main__":
-    # HOST = "127.0.0.1"
-    HOST = "10.8.0.9"
-    PORT = 2000
-    client = Client(HOST, PORT)
-    client.run()

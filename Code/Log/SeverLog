@@ -1,0 +1,72 @@
+2023-10-06 17:21:44,271 INFO     --------------------------[New Run File]--[6/10/2023]--[17:21]-----------------------------
+2023-10-06 17:21:44,275 INFO     Listening for connections on server and camera...
+2023-10-06 17:22:07,280 INFO     Connected to client: ('127.0.0.1', 60284)
+2023-10-06 17:22:09,483 INFO     Drone connected
+
+2023-10-06 17:22:09,484 INFO     Drone connected
+
+2023-10-06 17:22:49,580 INFO     Received: Command from client, 1
+2023-10-06 17:22:49,581 INFO     Executing command: 1
+2023-10-06 17:22:49,718 INFO     The delay of command 1 to drone: 0.06803345
+--------------------------------
+2023-10-06 17:22:55,497 INFO     Received: Command from client, 9
+2023-10-06 17:22:55,497 INFO     Executing command: 9
+2023-10-06 17:22:55,609 INFO     The delay of command 9 to drone: 0.05473825
+--------------------------------
+2023-10-06 17:23:26,063 INFO     Received: Command from client, 1
+2023-10-06 17:23:26,064 INFO     Executing command: 1
+2023-10-06 17:23:26,177 INFO     The delay of command 1 to drone: 0.0554163
+--------------------------------
+2023-10-06 17:23:28,146 INFO     Received: Command from client, 10
+2023-10-06 17:23:28,147 INFO     Executing command: 10
+2023-10-06 17:23:28,256 INFO     The delay of command 10 to drone: 0.05409965
+--------------------------------
+2023-10-06 17:23:34,977 INFO     Received: Command from client, 8
+2023-10-06 17:23:34,978 INFO     Executing command: 8
+2023-10-06 17:23:35,091 INFO     Status: POSITION_TARGET_LOCAL_NED received 
+The delay of command 8 to drone: 0.05584045
+--------------------------------
+2023-10-06 17:23:37,357 INFO     Received: Command from client, 7
+2023-10-06 17:23:37,358 INFO     Executing command: 7
+2023-10-06 17:23:37,468 INFO     Status: POSITION_TARGET_LOCAL_NED received 
+The delay of command 7 to drone: 0.05409895
+--------------------------------
+2023-10-06 17:23:39,549 INFO     Received: Command from client, 7
+2023-10-06 17:23:39,551 INFO     Executing command: 7
+2023-10-06 17:23:39,661 INFO     Status: POSITION_TARGET_LOCAL_NED received 
+The delay of command 7 to drone: 0.05429935
+--------------------------------
+2023-10-06 17:23:41,423 INFO     Received: Command from client, 7
+2023-10-06 17:23:41,428 INFO     Executing command: 7
+2023-10-06 17:23:41,534 INFO     Status: POSITION_TARGET_LOCAL_NED received 
+The delay of command 7 to drone: 0.0521958
+--------------------------------
+2023-10-06 17:23:43,193 INFO     Received: Command from client, 7
+2023-10-06 17:23:43,194 INFO     Executing command: 7
+2023-10-06 17:23:43,304 INFO     Status: POSITION_TARGET_LOCAL_NED received 
+The delay of command 7 to drone: 0.0535703
+--------------------------------
+2023-10-06 17:23:45,767 INFO     Received: Command from client, 8
+2023-10-06 17:23:45,768 INFO     Executing command: 8
+2023-10-06 17:23:45,877 INFO     Status: POSITION_TARGET_LOCAL_NED received 
+The delay of command 8 to drone: 0.05386305
+--------------------------------
+2023-10-06 17:23:47,865 INFO     Received: Command from client, 2
+2023-10-06 17:23:47,866 INFO     Executing command: 2
+2023-10-06 17:23:47,974 INFO     The delay of command 2 to drone: 0.05379135
+--------------------------------
+2023-10-06 17:23:48,949 INFO     Received: Command from client, 2
+2023-10-06 17:23:48,951 INFO     Executing command: 2
+2023-10-06 17:23:49,059 INFO     The delay of command 2 to drone: 0.05258555
+--------------------------------
+2023-10-06 17:23:50,102 INFO     Received: Command from client, 1
+2023-10-06 17:23:50,103 INFO     Executing command: 1
+2023-10-06 17:23:50,105 INFO     The delay of command 1 to drone: 0.00058705
+--------------------------------
+2023-10-06 17:23:54,702 INFO     Received: Command from client, 6
+2023-10-06 17:23:54,703 INFO     Executing command: 6
+2023-10-06 17:23:54,811 INFO     Status: POSITION_TARGET_LOCAL_NED received 
+The delay of command 6 to drone: 0.0533852
+--------------------------------
+2023-10-06 17:23:59,091 INFO     Client connection reset by peer
+2023-10-06 17:23:59,092 INFO     Client disconnected, returning to listen for connections...
