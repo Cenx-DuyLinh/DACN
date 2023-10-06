@@ -4,11 +4,13 @@ import threading
 import time
 import logging
 from queue import Queue
-
+import os
 
 class Client:
     def __init__(self, host, port):
-        logging.basicConfig(level=logging.DEBUG, filename="Log/ClientLog", filemode="a+",
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        current_log_file = current_dir + "\Log\ClientLog"
+        logging.basicConfig(level=logging.DEBUG, filename=current_log_file, filemode="a+",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
         date = time.localtime()
         logging.info(f"--------------------------[New Run File]--[{date.tm_mday}/{date.tm_mon}/{date.tm_year}]--[{date.tm_hour}:{date.tm_min}]-----------------------------")
@@ -67,7 +69,8 @@ class Client:
 
                 delay = ((time_recv - time_send) / 2) / 1e9
                 message = response.decode()
-                self.print_and_write_log(f"Received: {message}\nDelay: {delay}s\n--------------------------------")
+                self.print_and_write_log(f"Received: {message}")
+                self.print_and_write_log(f"Delay: {delay}s\n--------------------------------")
 
     def start_sending_thread(self):
         thread_send_message = threading.Thread(target=self.send_message, daemon=True)

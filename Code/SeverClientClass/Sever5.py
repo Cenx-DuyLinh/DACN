@@ -4,11 +4,13 @@ from queue import Queue
 import time
 import logging
 from CopterAAVC.Class.MAVlink import MyMAVlink,ProgressStatus
-
+import os
 
 class Server:
     def __init__(self, host, port,port_cam,connection_object):
-        logging.basicConfig(level=logging.DEBUG, filename="Log/SeverLog", filemode="a+",
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        current_log_file = current_dir + "\Log\SeverLog"
+        logging.basicConfig(level=logging.DEBUG, filename=current_log_file, filemode="a+",
                         format="%(asctime)-15s %(levelname)-8s %(message)s")
         date = time.localtime()
         logging.info(f"--------------------------[New Run File]--[{date.tm_mday}/{date.tm_mon}/{date.tm_year}]--[{date.tm_hour}:{date.tm_min}]-----------------------------")
@@ -101,7 +103,7 @@ class Server:
                 if delay > 1: 
                     self.print_and_write_log(f"Command {command} got timeout \n--------------------------------")
                 else :
-                    self.print_and_write_log(f"The delay of command {command} to drone: {delay}\n--------------------------------")
+                    self.print_and_write_log(f"The delay of command {command} to drone: {delay}s\n--------------------------------")
         if data == 2:
             start_time = time.perf_counter_ns()
             data,confirm = self.drone.get_ned_ack()
