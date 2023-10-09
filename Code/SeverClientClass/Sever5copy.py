@@ -1,6 +1,7 @@
 import socket, threading, time, logging, os, io, struct
 from queue import Queue
 from CopterAAVC.Class.MAVlink import MyMAVlink,ProgressStatus
+import picamera
 
 class SplitFrames(object):
     def __init__(self, connection):
@@ -55,28 +56,21 @@ class Server:
 
         self.print_and_write_log("Listening for connections on server and camera...")
     def cam_pi(self):
-        connection = self.conn_pi.accept()[0].makefile('wb')
+        self.connection_pi = self.conn_pi.accept()[0].makefile('wb')
         self.print_and_write_log("Connected to camera")
         self.cam_pi_connected = True
         while True:
             try:
-                output = SplitFrames(connection)
+                output = SplitFrames(self.connection_pi)
                 with picamera.PiCamera(resolution='VGA', framerate=30) as camera:
                     time.sleep(2)
                     start = time.time()
                     camera.start_recording(output, format='mjpeg')
-                    # camera.wait_recording(30)
-                    # camera.stop_recording()
-                    # Write the terminating 0-length to the connection to let the
-                    # server know we're done
-                    connection.write(struct.pack('<L', 0))
+                    self.connection_pi.write(struct.pack('<L', 0))
+                    print("writed")
             except ConnectionResetError:
-                camera.stop_recording()
                 self.print_and_write_log("Camera connection reset by peer")
             finally:
-                camera.stop_recording()
-                connection.close()
-                self.client_conn_pi.close()
                 finish = time.time()
                 self.print_and_write_log(f"Sent {output.count} in {finish-start} seconds at {output.count / (finish-start)}fps ")
     def stream_to_client(self,frame):
@@ -112,7 +106,7 @@ class Server:
                     while True:
                         data = self.client_conn.recv(100)
                         if not data:
-                            break
+                            continue
 
                         message, command = data.decode().split("\n")
                         self.command_queue.put(command)
@@ -207,12 +201,12 @@ class Server:
     def run(self):
         thread_receive = threading.Thread(target=self.receive_command_from_client, daemon=True)
         thread_send_to_drone = threading.Thread(target=self.send_to_drone, daemon=True)
-        thread_cam_pi = threading.Thread(target=self.cam_pi, daemon=True)
+        thread_cam_pi = threading.Thread(target=self.cam_pi,daemon=True)
 
         thread_receive.start()
 
-        # while not self.client_connected or not self.drone_connected or not self.cam_pi_connected:
-        while not self.client_connected or not self.drone_connected:
+        while not self.client_connected or not self.drone_connected or not self.cam_pi_connected:
+        # while not self.client_connected or not self.drone_connected:
             time.sleep(0.1)
         thread_cam_pi.start()
         thread_send_to_drone.start()

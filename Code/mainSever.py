@@ -10,5 +10,5 @@ if __name__ == "__main__":
     
     PORT = 2000
     PORT_CAM = 2001
-    server = Server(HOST_SELF, PORT,PORT_CAM,DRONE_SITL)
+    server = Server(HOST_SEVER, PORT,PORT_CAM,DRONE_PIX)
     server.run()
