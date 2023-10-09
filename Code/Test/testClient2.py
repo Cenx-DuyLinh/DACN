@@ -26,15 +26,16 @@ class SplitFrames(object):
         self.stream.write(buf)
 
 client_socket = socket.socket()
-client_socket.connect(('my_server', 8000))
+client_socket.connect(('10.8.0.13', 8000))
 connection = client_socket.makefile('wb')
 try:
     output = SplitFrames(connection)
     with picamera.PiCamera(resolution='VGA', framerate=30) as camera:
         time.sleep(2)
         start = time.time()
+        #mjpeg
         camera.start_recording(output, format='mjpeg')
-        camera.wait_recording(30)
+        camera.wait_recording(60)
         camera.stop_recording()
         # Write the terminating 0-length to the connection to let the
         # server know we're done

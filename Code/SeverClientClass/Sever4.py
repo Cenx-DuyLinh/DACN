@@ -130,13 +130,23 @@ class Server:
                     print(f"The delay of command {command} to drone: {delay}")
             elif command == "10":
                 self.drone.take_off(self.distant_to_move)
+<<<<<<< HEAD
                 start_time = time.perf_counter_ns()
                 data = self.drone.command_acknowledge()
                 
                 if data:
                     delay = (time.perf_counter_ns() - start_time)/2/1e9
                     print(f"The delay of command {command} to drone: {delay}")
-        
+            elif command == "11":
+                self.drone.set_mode(3)
+=======
+>>>>>>> e0211556039e16fe4ba6f994c9696b0f3acef8d0
+                start_time = time.perf_counter_ns()
+                data = self.drone.command_acknowledge()
+                
+                if data:
+                    delay = (time.perf_counter_ns() - start_time)/2/1e9
+                    print(f"The delay of command {command} to drone: {delay}")
             time.sleep(0.01)
             # Perform command execution or call another function here if needed
             # Do some processing or call another function here if needed
