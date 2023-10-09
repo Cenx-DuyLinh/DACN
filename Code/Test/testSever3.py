@@ -1,16 +1,19 @@
 import io
 import socket
 import struct
+import PIL
 from PIL import Image,ImageTk
 import tkinter as tk
 import queue
 import threading
+import time
 #!-------[THIS CODE RUN ON UR PC]----------------------------------------------------------------
 # Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
 # all interfaces)
 server_socket = socket.socket()
-server_socket.bind(('0.0.0.0', 8000))
+server_socket.bind(('10.8.0.13', 8000))
 server_socket.listen(0)
+print("Listening")
 #----------------------------------------------------------------
 window = tk.Tk()
 canvas = tk.Canvas(window, width=640, height=480)
@@ -34,24 +37,23 @@ def get_frame_from_sever():
         # processing on it
         image_stream.seek(0)
         image = Image.open(image_stream)
-        print('Image is %dx%d' % image.size)
-        image.verify()
-        print('Image is verified')
         my_queue.put(image)
+    
 def update_to_canvas():
     while True:
         if not my_queue.empty():
             image = my_queue.get()
             # Resize the image to fit the canvas
-            resized_image = image.resize((640, 480))
+            # resized_image = image.resize((640, 480))
             # Convert the image to Tkinter-compatible format
-            tk_image = ImageTk.PhotoImage(resized_image)
+            tk_image = ImageTk.PhotoImage(image)
             # Update the canvas with the new image
             canvas.create_image(0, 0, anchor=tk.NW, image=tk_image)
             # Keep a reference to the image to prevent it from being garbage collected
             canvas.image = tk_image
-        # Schedule the next update after 100 milliseconds
-        window.after(100, update_to_canvas)
+            window.update()
+            print("Image updated")
+            time.sleep(0.001)
 
 def run_threads():
     # Start the thread to receive frames from the server

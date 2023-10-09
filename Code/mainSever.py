@@ -1,4 +1,4 @@
-from SeverClientClass.Sever5 import *
+from SeverClientClass.Sever5copy import *
 
 if __name__ == "__main__":
     HOST_SELF = "127.0.0.1"
