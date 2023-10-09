@@ -62,7 +62,7 @@ class Client:
         self.print_and_write_log("Connected to Sever")
 
         self.conn_pi = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.conn_pi.connect((self.host, self.port))
+        self.conn_pi.connect((self.host, self.port_pi))
         self.conn_pi_obj = self.conn_pi.makefile('rb')
         self.print_and_write_log("Connected to Camera")
     def get_image_from_sever(self):
