@@ -5,7 +5,7 @@ from PIL import Image
 
 # Create a socket to connect to the server
 client_socket = socket.socket()
-client_socket.connect(('my_server', 8000))
+client_socket.connect(('10.8.0.9', 8000))
 connection = client_socket.makefile('rb')
 
 try:
