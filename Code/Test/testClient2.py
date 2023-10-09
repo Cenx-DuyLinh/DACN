@@ -3,6 +3,7 @@ import socket
 import struct
 import time
 import picamera
+#!--------[THIS CODE RUN ON U RASP PI]--------------------------------
 
 class SplitFrames(object):
     def __init__(self, connection):
@@ -32,8 +33,9 @@ try:
     with picamera.PiCamera(resolution='VGA', framerate=30) as camera:
         time.sleep(2)
         start = time.time()
+        #mjpeg
         camera.start_recording(output, format='mjpeg')
-        camera.wait_recording(30)
+        camera.wait_recording(60)
         camera.stop_recording()
         # Write the terminating 0-length to the connection to let the
         # server know we're done

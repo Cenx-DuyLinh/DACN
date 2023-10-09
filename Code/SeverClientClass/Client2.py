@@ -2,16 +2,23 @@ import socket
 import tkinter as tk
 import threading
 import time
+import logging
 from queue import Queue
-
+import os
 
 class Client:
     def __init__(self, host, port):
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        current_log_file = current_dir + "\Log\ClientLog"
+        logging.basicConfig(level=logging.DEBUG, filename=current_log_file, filemode="a+",
+                        format="%(asctime)-15s %(levelname)-8s %(message)s")
+        date = time.localtime()
+        logging.info(f"--------------------------[New Run File]--[{date.tm_mday}/{date.tm_mon}/{date.tm_year}]--[{date.tm_hour}:{date.tm_min}]-----------------------------")
         self.host = host
         self.port = port
         self.command_queue = Queue()
         self.setup_ui()
-        self.connect()
+        self.connect_to_sever()
 
     def setup_ui(self):
         self.window = tk.Tk()
@@ -26,37 +33,28 @@ class Client:
         button_arm = self.create_button("Arm", 1)
         button_disarm = self.create_button("Disarm", 2)
         button_switch_to_guided = self.create_button("Switch to Guided",9)
+        button_switch_to_auto = self.create_button("Switch to Auto",11)
         button_take_off = self.create_button("Take Off",10)
+        button_stop = self.create_button("Stop",12)
 
         buttons = [button_left, button_right, button_forward, button_backward, 
-                   button_up, button_down, button_arm, button_disarm,button_switch_to_guided,button_take_off]
+                   button_up, button_down,button_stop, button_arm, button_disarm,button_switch_to_guided,button_switch_to_auto,button_take_off]
         
         for button in buttons:
             button.pack(side=tk.LEFT)
 
     def create_button(self, text, command):
-        return tk.Button(self.window, text=text,
+        return tk.Button(self.window, text=text,width=15,height=3,
                          command=lambda: self.command_queue.put(command))
-
-    def connect(self):
+    def print_and_write_log(self,data):
+            print(data)
+            logging.info(data)
+    def connect_to_sever(self):
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn.connect((self.host, self.port))
-        print("Connected")
+        self.print_and_write_log("Connected")
 
     def send_message(self):
-        """
-        Args: 
-        1: ARM
-        2: DISARM
-        3: LEFT
-        4: RIGHT
-        5: UP
-        6: DOWN
-        7: FORWARD
-        8: BACKWARD
-        9: SWITCH TO GUIDED
-        10: TAKE OFF
-        """
         while True:
             if not self.command_queue.empty():
                 command = self.command_queue.get()
@@ -64,14 +62,15 @@ class Client:
                 self.conn.sendall(message.encode())
 
                 time_send = time.perf_counter_ns()
-                print("Sent:", message)
+                # print("Sent:", message)
 
                 response = self.conn.recv(100)
                 time_recv = time.perf_counter_ns()
 
                 delay = ((time_recv - time_send) / 2) / 1e9
                 message = response.decode()
-                print(f"Received: {message}, Delay: {delay} s")
+                self.print_and_write_log(f"Received: {message}")
+                self.print_and_write_log(f"Delay: {delay}s\n--------------------------------")
 
     def start_sending_thread(self):
         thread_send_message = threading.Thread(target=self.send_message, daemon=True)
@@ -82,9 +81,3 @@ class Client:
         self.window.mainloop()
 
 
-if __name__ == "__main__":
-    # HOST = "127.0.0.1"
-    HOST = "10.8.0.9"
-    PORT = 2000
-    client = Client(HOST, PORT)
-    client.run()

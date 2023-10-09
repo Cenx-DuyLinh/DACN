@@ -26,11 +26,10 @@ try:
         # Rewind the stream, open it as an image with PIL and do some
         # processing on it
         image_stream.seek(0)
-        image = Image.open(image_stream).convert('RGB')
+        image = Image.open(image_stream)
         print('Image is %dx%d' % image.size)
         image.verify()
         print('Image is verified')
-        image.show()
 finally:
     connection.close()
     server_socket.close()

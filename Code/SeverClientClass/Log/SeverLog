@@ -1,0 +1,179 @@
+2023-10-06 18:07:06,173 INFO     --------------------------[New Run File]--[6/10/2023]--[18:7]-----------------------------
+2023-10-06 18:07:06,181 INFO     Listening for connections on server and camera...
+2023-10-06 18:07:11,200 INFO     Connected to client: ('127.0.0.1', 64531)
+2023-10-06 18:07:13,307 INFO     Drone connected
+
+2023-10-06 18:07:13,310 INFO     Received: Command from client, 1
+2023-10-06 18:07:13,310 INFO     Executing command: 1
+2023-10-06 18:07:13,423 INFO     The delay of command 1 to drone: 0.05645655
+--------------------------------
+2023-10-06 18:07:13,886 INFO     Received: Command from client, 2
+2023-10-06 18:07:13,887 INFO     Executing command: 2
+2023-10-06 18:07:13,996 INFO     The delay of command 2 to drone: 0.0541068
+--------------------------------
+2023-10-06 18:07:14,685 INFO     Received: Command from client, 1
+2023-10-06 18:07:14,686 INFO     Executing command: 1
+2023-10-06 18:07:14,805 INFO     The delay of command 1 to drone: 0.05655455
+--------------------------------
+2023-10-06 18:07:15,094 INFO     Received: Command from client, 2
+2023-10-06 18:07:15,095 INFO     Executing command: 2
+2023-10-06 18:07:15,203 INFO     The delay of command 2 to drone: 0.05312975
+--------------------------------
+2023-10-06 18:07:16,517 INFO     Client connection reset by peer
+2023-10-06 18:07:16,517 INFO     Client disconnected, returning to listen for connections...
+2023-10-06 18:08:23,831 INFO     Connected to client: ('127.0.0.1', 64554)
+2023-10-06 18:08:28,847 INFO     Received: Command from client, 2
+2023-10-06 18:08:28,848 INFO     Executing command: 2
+2023-10-06 18:08:28,849 INFO     Received: Command from client, 1
+2023-10-06 18:08:28,852 INFO     Received: Command from client, 2
+2023-10-06 18:08:29,108 INFO     The delay of command 2 to drone: 0.1195634
+--------------------------------
+2023-10-06 18:08:29,115 INFO     Executing command: 1
+2023-10-06 18:08:29,224 INFO     The delay of command 1 to drone: 0.05322765
+--------------------------------
+2023-10-06 18:08:29,226 INFO     Executing command: 2
+2023-10-06 18:08:29,332 INFO     The delay of command 2 to drone: 0.05188065
+--------------------------------
+2023-10-06 18:08:34,551 INFO     Received: Command from client, 1
+2023-10-06 18:08:34,554 INFO     Executing command: 1
+2023-10-06 18:08:34,667 INFO     The delay of command 1 to drone: 0.05606595
+--------------------------------
+2023-10-06 18:08:35,237 INFO     Received: Command from client, 2
+2023-10-06 18:08:35,239 INFO     Executing command: 2
+2023-10-06 18:08:35,348 INFO     The delay of command 2 to drone: 0.0544071
+--------------------------------
+2023-10-06 18:08:35,691 INFO     Received: Command from client, 1
+2023-10-06 18:08:35,692 INFO     Executing command: 1
+2023-10-06 18:08:35,801 INFO     The delay of command 1 to drone: 0.05431795
+--------------------------------
+2023-10-06 18:08:36,190 INFO     Received: Command from client, 2
+2023-10-06 18:08:36,191 INFO     Executing command: 2
+2023-10-06 18:08:36,300 INFO     The delay of command 2 to drone: 0.05406125
+--------------------------------
+2023-10-06 18:08:36,725 INFO     Received: Command from client, 1
+2023-10-06 18:08:36,729 INFO     Executing command: 1
+2023-10-06 18:08:36,843 INFO     The delay of command 1 to drone: 0.0563387
+--------------------------------
+2023-10-06 18:08:37,131 INFO     Received: Command from client, 2
+2023-10-06 18:08:37,132 INFO     Executing command: 2
+2023-10-06 18:08:37,240 INFO     The delay of command 2 to drone: 0.0552434
+--------------------------------
+2023-10-06 18:08:38,689 INFO     Client connection reset by peer
+2023-10-06 18:08:38,690 INFO     Client disconnected, returning to listen for connections...
+2023-10-06 18:10:15,673 INFO     Connected to client: ('127.0.0.1', 64595)
+2023-10-06 18:10:20,684 INFO     Received: Command from client, 1
+2023-10-06 18:10:20,685 INFO     Executing command: 1
+2023-10-06 18:10:20,765 INFO     The delay of command 1 to drone: 0.03785245
+--------------------------------
+2023-10-06 18:10:22,741 INFO     Received: Command from client, 2
+2023-10-06 18:10:22,743 INFO     Executing command: 2
+2023-10-06 18:10:22,750 INFO     The delay of command 2 to drone: 0.00244755
+--------------------------------
+2023-10-06 18:10:24,127 INFO     Received: Command from client, 1
+2023-10-06 18:10:24,128 INFO     Executing command: 1
+2023-10-06 18:10:24,242 INFO     The delay of command 1 to drone: 0.05617995
+--------------------------------
+2023-10-06 18:10:24,691 INFO     Received: Command from client, 2
+2023-10-06 18:10:24,692 INFO     Executing command: 2
+2023-10-06 18:10:24,812 INFO     The delay of command 2 to drone: 0.0592265
+--------------------------------
+2023-10-06 18:10:25,101 INFO     Received: Command from client, 1
+2023-10-06 18:10:25,102 INFO     Executing command: 1
+2023-10-06 18:10:25,220 INFO     The delay of command 1 to drone: 0.05604895
+--------------------------------
+2023-10-06 18:10:25,597 INFO     Received: Command from client, 2
+2023-10-06 18:10:25,598 INFO     Executing command: 2
+2023-10-06 18:10:25,711 INFO     The delay of command 2 to drone: 0.0560585
+--------------------------------
+2023-10-06 18:10:26,151 INFO     Received: Command from client, 1
+2023-10-06 18:10:26,152 INFO     Executing command: 1
+2023-10-06 18:10:26,264 INFO     The delay of command 1 to drone: 0.0553324
+--------------------------------
+2023-10-06 18:10:26,577 INFO     Received: Command from client, 2
+2023-10-06 18:10:26,578 INFO     Executing command: 2
+2023-10-06 18:10:26,689 INFO     The delay of command 2 to drone: 0.0552334
+--------------------------------
+2023-10-06 18:10:26,955 INFO     Received: Command from client, 1
+2023-10-06 18:10:26,956 INFO     Executing command: 1
+2023-10-06 18:10:27,064 INFO     The delay of command 1 to drone: 0.05357605
+--------------------------------
+2023-10-06 18:10:27,327 INFO     Received: Command from client, 2
+2023-10-06 18:10:27,328 INFO     Executing command: 2
+2023-10-06 18:10:27,438 INFO     The delay of command 2 to drone: 0.0545186
+--------------------------------
+2023-10-06 18:10:28,747 INFO     Client connection reset by peer
+2023-10-06 18:10:28,748 INFO     Client disconnected, returning to listen for connections...
+2023-10-06 18:11:15,583 INFO     Connected to client: ('127.0.0.1', 64613)
+2023-10-06 18:11:20,589 INFO     Received: Command from client, 1
+2023-10-06 18:11:20,591 INFO     Executing command: 1
+2023-10-06 18:11:20,696 INFO     The delay of command 1 to drone: 0.05119695
+--------------------------------
+2023-10-06 18:11:22,702 INFO     Received: Command from client, 2
+2023-10-06 18:11:22,703 INFO     Executing command: 2
+2023-10-06 18:11:22,819 INFO     The delay of command 2 to drone: 0.05694315
+--------------------------------
+2023-10-06 18:11:23,529 INFO     Received: Command from client, 1
+2023-10-06 18:11:23,530 INFO     Executing command: 1
+2023-10-06 18:11:23,639 INFO     The delay of command 1 to drone: 0.05417205
+--------------------------------
+2023-10-06 18:11:24,500 INFO     Received: Command from client, 2
+2023-10-06 18:11:24,520 INFO     Executing command: 2
+2023-10-06 18:11:24,637 INFO     The delay of command 2 to drone: 0.0560495
+--------------------------------
+2023-10-06 18:11:25,479 INFO     Received: Command from client, 1
+2023-10-06 18:11:25,480 INFO     Executing command: 1
+2023-10-06 18:11:25,592 INFO     The delay of command 1 to drone: 0.0545083
+--------------------------------
+2023-10-06 18:11:26,119 INFO     Received: Command from client, 2
+2023-10-06 18:11:26,120 INFO     Executing command: 2
+2023-10-06 18:11:26,229 INFO     The delay of command 2 to drone: 0.0539979
+--------------------------------
+2023-10-06 18:11:26,526 INFO     Received: Command from client, 1
+2023-10-06 18:11:26,527 INFO     Executing command: 1
+2023-10-06 18:11:26,638 INFO     The delay of command 1 to drone: 0.05460055
+--------------------------------
+2023-10-06 18:11:26,916 INFO     Received: Command from client, 2
+2023-10-06 18:11:26,917 INFO     Executing command: 2
+2023-10-06 18:11:27,028 INFO     The delay of command 2 to drone: 0.05413045
+--------------------------------
+2023-10-06 18:11:28,241 INFO     Client connection reset by peer
+2023-10-06 18:11:28,241 INFO     Client disconnected, returning to listen for connections...
+2023-10-06 18:12:28,129 INFO     Connected to client: ('127.0.0.1', 64642)
+2023-10-06 18:12:33,144 INFO     Received: Command from client, 1
+2023-10-06 18:12:33,145 INFO     Executing command: 1
+2023-10-06 18:12:33,148 INFO     Received: Command from client, 2
+2023-10-06 18:12:33,153 INFO     Received: Command from client, 1
+2023-10-06 18:12:33,156 INFO     Received: Command from client, 2
+2023-10-06 18:12:33,281 INFO     The delay of command 1 to drone: 0.04413235
+--------------------------------
+2023-10-06 18:12:33,295 INFO     Executing command: 2
+2023-10-06 18:12:33,419 INFO     The delay of command 2 to drone: 0.0616189
+--------------------------------
+2023-10-06 18:12:33,420 INFO     Executing command: 1
+2023-10-06 18:12:33,536 INFO     The delay of command 1 to drone: 0.0574298
+--------------------------------
+2023-10-06 18:12:33,537 INFO     Executing command: 2
+2023-10-06 18:12:33,650 INFO     The delay of command 2 to drone: 0.05546865
+--------------------------------
+2023-10-06 18:12:36,095 INFO     Received: Command from client, 1
+2023-10-06 18:12:36,096 INFO     Executing command: 1
+2023-10-06 18:12:36,104 INFO     The delay of command 1 to drone: 0.0020922
+--------------------------------
+2023-10-06 18:12:36,529 INFO     Received: Command from client, 2
+2023-10-06 18:12:36,531 INFO     Executing command: 2
+2023-10-06 18:12:36,641 INFO     The delay of command 2 to drone: 0.0542915
+--------------------------------
+2023-10-06 18:12:36,844 INFO     Received: Command from client, 1
+2023-10-06 18:12:36,846 INFO     Executing command: 1
+2023-10-06 18:12:36,957 INFO     The delay of command 1 to drone: 0.05488805
+--------------------------------
+2023-10-06 18:12:37,185 INFO     Received: Command from client, 2
+2023-10-06 18:12:37,186 INFO     Executing command: 2
+2023-10-06 18:12:37,297 INFO     The delay of command 2 to drone: 0.05488035
+--------------------------------
+2023-10-06 18:12:37,481 INFO     Received: Command from client, 2
+2023-10-06 18:12:37,482 INFO     Executing command: 2
+2023-10-06 18:12:37,596 INFO     The delay of command 2 to drone: 0.0566777
+--------------------------------
+2023-10-06 18:12:39,071 INFO     Client connection reset by peer
+2023-10-06 18:12:39,072 INFO     Client disconnected, returning to listen for connections...
