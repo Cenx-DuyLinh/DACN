@@ -7,7 +7,6 @@ from CopterAAVC.Class.MAVlink import MyMAVlink,ProgressStatus
 import os
 import io 
 import struct
-import picamera
 class SplitFrames(object):
     def __init__(self, connection):
         self.connection = connection
@@ -24,7 +23,6 @@ class SplitFrames(object):
                 self.connection.flush()
                 self.stream.seek(0)
                 self.connection.write(self.stream.read(size))
-                print('something')
                 self.count += 1
                 self.stream.seek(0)
         self.stream.write(buf)
@@ -63,7 +61,6 @@ class Server:
 
         self.print_and_write_log("Listening for connections on server and camera...")
     def cam_pi(self):
-        print("campi thread is running")
         connection = self.conn_pi.accept()[0].makefile('wb')
         self.cam_pi_connected =True
         try:
@@ -71,7 +68,11 @@ class Server:
             with picamera.PiCamera(resolution='VGA', framerate=30) as camera:
                 time.sleep(2)  # Give the camera time to initialize
                 camera.start_recording(output, format='mjpeg')
-            
+                camera.wait_recording(30)
+                camera.stop_recording()
+                # Write the terminating 0-length to the connection to let the
+                # client know we're done
+                connection.write(struct.pack('<L', 0))
         finally:
             connection.close()
             self.conn_pi.close()
@@ -207,13 +208,14 @@ class Server:
         thread_cam_pi = threading.Thread(target=self.cam_pi, daemon=True)
 
         thread_receive.start()
+        thread_cam_pi.start()
 
-        # while not self.client_connected or not self.drone_connected or not self.cam_pi_connected:
-        while not self.client_connected or not self.drone_connected:
+        while not self.client_connected or not self.drone_connected or not self.cam_pi_connected:
+        # while not self.client_connected or not self.drone_connected:
             time.sleep(0.1)
 
         thread_send_to_drone.start()
-        thread_cam_pi.start()
+        
 
         thread_receive.join()
         thread_send_to_drone.join()

@@ -80,16 +80,16 @@ class Client:
             # processing on it
             image_stream.seek(0)
             image = Image.open(image_stream)
-            self.queue_camera.put(image)
+            tk_image = ImageTk.PhotoImage(image)
+            self.queue_camera.put(tk_image)
             print("put image")
     def update_camera(self):
         while True:
             if not self.queue_camera.empty():
-                image = self.queue_camera.get()
-                tk_image = ImageTk.PhotoImage(image)
+                tk_image = self.queue_camera.get()
                 self.canvas.create_image(0, 0, anchor=tk.NW, image=tk_image)
                 # Keep a reference to the image to prevent it from being garbage collected
-                self.canvas.image = tk_image
+                # self.canvas.image = tk_image
                 self.window.update()
                 print("Image updated")
                 time.sleep(0.001)
@@ -114,14 +114,14 @@ class Client:
 
     def start_thread(self):
         thread_send_message = threading.Thread(target=self.send_message, daemon=True)
-        # thread_get_image = threading.Thread(target=self.get_image_from_sever, daemon=True)
-        # thread_update_camera = threading.Thread(target=self.update_camera, daemon=True)
+        thread_get_image = threading.Thread(target=self.get_image_from_sever, daemon=True)
+        thread_update_camera = threading.Thread(target=self.update_camera, daemon=True)
 
         
         thread_send_message.start()
 
-        # thread_get_image.start()
-        # thread_update_camera.start()
+        thread_get_image.start()
+        thread_update_camera.start()
 
     def run(self):
         self.start_thread()
