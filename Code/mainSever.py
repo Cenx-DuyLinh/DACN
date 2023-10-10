@@ -1,4 +1,4 @@
-from SeverClientClass.Sever5copy import *
+from SeverClientClass.Sever5copy2 import *
 
 if __name__ == "__main__":
     HOST_SELF = "127.0.0.1"
@@ -9,6 +9,6 @@ if __name__ == "__main__":
     DRONE_PIX = "/dev/serial0"
     
     PORT = 2000
-    PORT_CAM = 2001
+    PORT_CAM = 5000
     server = Server(HOST_SEVER, PORT,PORT_CAM,DRONE_PIX)
     server.run()

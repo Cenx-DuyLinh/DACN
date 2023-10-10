@@ -7,6 +7,7 @@ from CopterAAVC.Class.MAVlink import MyMAVlink,ProgressStatus
 import os
 import io 
 import struct
+import picamera
 class SplitFrames(object):
     def __init__(self, connection):
         self.connection = connection
@@ -63,17 +64,18 @@ class Server:
     def cam_pi(self):
         connection = self.conn_pi.accept()[0].makefile('wb')
         self.cam_pi_connected =True
+        print("camPIconnect to client")
         try:
             output = SplitFrames(connection)
             with picamera.PiCamera(resolution='VGA', framerate=30) as camera:
                 time.sleep(2)  # Give the camera time to initialize
                 camera.start_recording(output, format='mjpeg')
-                camera.wait_recording(30)
+                camera.wait_recording(6400)
                 camera.stop_recording()
                 # Write the terminating 0-length to the connection to let the
                 # client know we're done
                 connection.write(struct.pack('<L', 0))
-        finally:
+        except KeyboardInterrupt:
             connection.close()
             self.conn_pi.close()
             print('Sent %d images' % output.count)
@@ -209,13 +211,14 @@ class Server:
 
         thread_receive.start()
         thread_cam_pi.start()
-
+        print("campi thread and recieve thread start")
         while not self.client_connected or not self.drone_connected or not self.cam_pi_connected:
         # while not self.client_connected or not self.drone_connected:
+            print("sleeping")
             time.sleep(0.1)
 
         thread_send_to_drone.start()
-        
+        print("thread send drone start")
 
         thread_receive.join()
         thread_send_to_drone.join()
