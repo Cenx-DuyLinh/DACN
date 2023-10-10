@@ -208,13 +208,14 @@ class Server:
         thread_cam_pi = threading.Thread(target=self.cam_pi, daemon=True)
 
         thread_receive.start()
+        thread_cam_pi.start()
 
         while not self.client_connected or not self.drone_connected or not self.cam_pi_connected:
         # while not self.client_connected or not self.drone_connected:
             time.sleep(0.1)
 
         thread_send_to_drone.start()
-        thread_cam_pi.start()
+        
 
         thread_receive.join()
         thread_send_to_drone.join()
