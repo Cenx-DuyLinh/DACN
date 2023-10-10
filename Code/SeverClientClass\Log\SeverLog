@@ -1,0 +1,90 @@
+2023-10-09 16:18:44,602 INFO     --------------------------[New Run File]--[9/10/2023]--[16:18]-----------------------------
+2023-10-09 16:18:44,603 INFO     Listening for connections on server and camera...
+2023-10-09 16:18:55,386 INFO     Connected to client: ('10.8.0.13', 49508)
+2023-10-09 16:18:57,416 INFO     Drone connected
+
+2023-10-09 16:19:33,702 INFO     Received: Command from client, 1
+2023-10-09 16:20:49,524 INFO     --------------------------[New Run File]--[9/10/2023]--[16:20]-----------------------------
+2023-10-09 16:20:56,361 INFO     --------------------------[New Run File]--[9/10/2023]--[16:20]-----------------------------
+2023-10-09 16:20:56,362 INFO     Listening for connections on server and camera...
+2023-10-09 16:21:03,175 INFO     Connected to client: ('10.8.0.13', 49536)
+2023-10-09 16:21:05,204 INFO     Drone connected
+
+2023-10-09 16:23:06,530 INFO     --------------------------[New Run File]--[9/10/2023]--[16:23]-----------------------------
+2023-10-09 16:23:15,467 INFO     --------------------------[New Run File]--[9/10/2023]--[16:23]-----------------------------
+2023-10-09 16:23:15,468 INFO     Listening for connections on server and camera...
+2023-10-09 16:23:22,326 INFO     Connected to client: ('10.8.0.13', 49551)
+2023-10-09 16:23:24,359 INFO     Drone connected
+
+2023-10-09 16:25:25,679 INFO     --------------------------[New Run File]--[9/10/2023]--[16:25]-----------------------------
+2023-10-09 16:25:25,680 INFO     Listening for connections on server and camera...
+2023-10-09 16:25:30,083 INFO     Connected to client: ('10.8.0.13', 49573)
+2023-10-09 16:25:32,111 INFO     Drone connected
+
+2023-10-09 16:26:31,173 INFO     Client connection reset by peer
+2023-10-09 16:26:31,174 INFO     Client disconnected, returning to listen for connections...
+2023-10-09 16:26:45,173 INFO     Connected to client: ('10.8.0.13', 49578)
+2023-10-09 16:26:47,180 INFO     Drone connected
+
+2023-10-09 16:27:02,452 INFO     Client connection reset by peer
+2023-10-09 16:27:02,453 INFO     Client disconnected, returning to listen for connections...
+2023-10-09 16:27:39,782 INFO     Connected to client: ('10.8.0.13', 49586)
+2023-10-09 16:27:41,789 INFO     Drone connected
+
+2023-10-09 16:27:57,458 INFO     --------------------------[New Run File]--[9/10/2023]--[16:27]-----------------------------
+2023-10-09 16:27:57,458 INFO     Listening for connections on server and camera...
+2023-10-09 16:28:02,060 INFO     Connected to client: ('10.8.0.13', 49588)
+2023-10-09 16:28:04,085 INFO     Drone connected
+
+2023-10-09 16:28:38,465 INFO     Client connection reset by peer
+2023-10-09 16:28:38,466 INFO     Client disconnected, returning to listen for connections...
+2023-10-09 16:30:55,027 INFO     Connected to client: ('10.8.0.13', 49602)
+2023-10-09 16:30:57,034 INFO     Drone connected
+
+2023-10-09 16:31:47,966 INFO     Client connection reset by peer
+2023-10-09 16:31:47,967 INFO     Client disconnected, returning to listen for connections...
+2023-10-09 16:41:05,308 INFO     --------------------------[New Run File]--[9/10/2023]--[16:41]-----------------------------
+2023-10-09 16:41:05,309 INFO     Listening for connections on server and camera...
+2023-10-09 16:41:10,628 INFO     Connected to client: ('10.8.0.13', 49677)
+2023-10-09 16:41:12,653 INFO     Drone connected
+
+2023-10-09 16:42:42,697 INFO     --------------------------[New Run File]--[9/10/2023]--[16:42]-----------------------------
+2023-10-09 16:42:49,707 INFO     --------------------------[New Run File]--[9/10/2023]--[16:42]-----------------------------
+2023-10-09 16:42:49,707 INFO     Listening for connections on server and camera...
+2023-10-09 16:43:00,434 INFO     Connected to client: ('10.8.0.13', 49687)
+2023-10-09 16:43:02,454 INFO     Drone connected
+
+2023-10-09 16:44:56,252 INFO     --------------------------[New Run File]--[9/10/2023]--[16:44]-----------------------------
+2023-10-09 16:44:56,253 INFO     Listening for connections on server and camera...
+2023-10-09 16:47:19,570 INFO     --------------------------[New Run File]--[9/10/2023]--[16:47]-----------------------------
+2023-10-09 16:47:19,572 INFO     Listening for connections on server and camera...
+2023-10-09 16:47:23,826 INFO     Connected to client: ('10.8.0.13', 49732)
+2023-10-09 16:47:25,853 INFO     Drone connected
+
+2023-10-09 16:52:18,970 INFO     Client connection reset by peer
+2023-10-09 16:52:18,970 INFO     Client disconnected, returning to listen for connections...
+2023-10-09 17:18:59,766 INFO     --------------------------[New Run File]--[9/10/2023]--[17:18]-----------------------------
+2023-10-09 17:18:59,767 INFO     Listening for connections on server and camera...
+2023-10-09 17:19:19,989 INFO     Connected to client: ('10.8.0.13', 58453)
+2023-10-09 17:19:22,021 INFO     Drone connected
+
+2023-10-09 17:20:15,370 INFO     Received: Command from client, 1
+2023-10-09 17:20:15,371 INFO     Executing command: 1
+2023-10-09 17:20:17,469 INFO     Command 1 got timeout 
+--------------------------------
+2023-10-09 17:20:18,990 INFO     Received: Command from client, 1
+2023-10-09 17:20:18,991 INFO     Executing command: 1
+2023-10-09 17:20:20,899 INFO     Received: Command from client, 1
+2023-10-09 17:20:21,005 INFO     Command 1 got timeout 
+--------------------------------
+2023-10-09 17:20:21,006 INFO     Executing command: 1
+2023-10-09 17:20:22,212 INFO     Received: Command from client, 2
+2023-10-09 17:20:23,018 INFO     Command 1 got timeout 
+--------------------------------
+2023-10-09 17:20:23,020 INFO     Executing command: 2
+2023-10-09 17:20:25,033 INFO     Command 2 got timeout 
+--------------------------------
+2023-10-09 17:20:28,326 INFO     Received: Command from client, 9
+2023-10-09 17:20:28,327 INFO     Executing command: 9
+2023-10-09 17:20:28,331 INFO     The delay of command 9 to drone: 0.001913311s
+--------------------------------
