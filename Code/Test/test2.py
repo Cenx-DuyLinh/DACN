@@ -1,88 +1,31 @@
-import cv2
-import socket
-import pickle
-import struct
-import tkinter as tk
-from PIL import Image, ImageTk
-import threading
 import queue
 
-# Server configuration
-HOST = 'localhost'
-PORT = 9999
+class LimitedQueue(queue.Queue):
+    def __init__(self, maxsize):
+        super().__init__(maxsize)
+        self.maxsize = maxsize
 
-class StreamClient:
-    def __init__(self, host, port):
-        self.queue = queue.Queue()
-        self.host = host
-        self.port = port
+    def put(self, item, block=True, timeout=None):
+        if self.full():
+            self.get()  # Remove the oldest item when the queue is full
+        super().put(item, block, timeout)
 
-        # Create a Tkinter window
-        self.root = tk.Tk()
-        self.root.title("Webcam Stream")
-        self.canvas = tk.Canvas(self.root, width=640, height=480)
-        self.canvas.pack()
+# Create a LimitedQueue with a maximum size of 5
+q = LimitedQueue(maxsize=5)
 
-    def start(self):
-        # Start video streaming thread
-        video_thread = threading.Thread(target=self.receive_video)
-        video_thread.start()
-        show_video_thread = threading.Thread(target=self.show_video)
-        show_video_thread.start()
-        
-        # Start Tkinter main loop
-        self.root.mainloop()
+# Add items to the queue
+q.put(1)
+q.put(2)
+q.put(3)
+q.put(4)
+q.put(5)
 
-    def show_video(self):
-        while True:
-            frame = self.queue.get()
-            if frame is None:
-                continue
-            else:
-                # Convert the frame to PIL Image format
-                image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                image = Image.fromarray(image)
+print(f"Queue size: {q.qsize()}")  # Output: 5
 
-                # Resize the image to fit the canvas
-                image = image.resize((640, 480), Image.LANCZOS)
+# Add a new item (6) to the queue, oldest item (1) is automatically removed
+for i in range(6,10):
+    q.put(i)
 
-                # Update the Tkinter window with the current frame
-                tk_image = ImageTk.PhotoImage(image)
-                self.canvas.create_image(0, 0, anchor=tk.NW, image=tk_image)
-                self.root.update()
-
-    def receive_video(self):
-        # Initialize client socket
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.connect((self.host, self.port))
-
-        try:
-            while True:
-                # Receive the packed frame size and data
-                data = b""
-                while len(data) < struct.calcsize("Q"):
-                    packet = client_socket.recv(4 * 1024)
-                    print("package recieve from sever")
-                    if not packet:
-                        break
-                    data += packet
-
-                # Extract the frame size and data
-                message_size = struct.unpack("Q", data[:8])[0]
-                data = data[8:]
-                while len(data) < message_size:
-                    data += client_socket.recv(4 * 1024)
-
-                # Extract the frame from the received data
-                frame = pickle.loads(data)
-                self.queue.put(frame)
-
-        except KeyboardInterrupt:
-            pass
-
-        # Close gracefully
-        client_socket.close()
-
-# Create the StreamClient instance and start the streaming
-client = StreamClient(HOST, PORT)
-client.start()
+# Retrieve and display the current queue items
+    queue_items = list(q.queue)
+    print(f"Updated queue: {queue_items}")  # Output: [2, 3, 4, 5, 6]

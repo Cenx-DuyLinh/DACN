@@ -8,6 +8,15 @@ import queue
 import threading
 import time
 #!-------[THIS CODE RUN ON UR PC]----------------------------------------------------------------
+class LimitedQueue(queue.Queue):
+    def __init__(self, maxsize):
+        super().__init__(maxsize)
+        self.maxsize = maxsize
+
+    def put(self, item, block=True, timeout=None):
+        if self.full():
+            self.get()  # Remove the oldest item when the queue is full
+        super().put(item, block, timeout)
 # Start a socket listening for connections on 0.0.0.0:8000 (0.0.0.0 means
 # all interfaces)
 server_socket = socket.socket()
@@ -20,7 +29,7 @@ canvas = tk.Canvas(window, width=640, height=480)
 canvas.pack()
 #----------------------------------------------------------------
 # Accept a single connection and make a file-like object out of it
-my_queue = queue.Queue()
+my_queue = LimitedQueue(maxsize=10)
 connection = server_socket.accept()[0].makefile('rb')
 def get_frame_from_sever():
     while True:
@@ -39,29 +48,27 @@ def get_frame_from_sever():
         image = Image.open(image_stream)
         my_queue.put(image)
     
+    
 def update_to_canvas():
-    while True:
-        if not my_queue.empty():
-            image = my_queue.get()
-            # Resize the image to fit the canvas
-            # resized_image = image.resize((640, 480))
-            # Convert the image to Tkinter-compatible format
-            tk_image = ImageTk.PhotoImage(image)
-            # Update the canvas with the new image
-            canvas.create_image(0, 0, anchor=tk.NW, image=tk_image)
-            # Keep a reference to the image to prevent it from being garbage collected
-            canvas.image = tk_image
-            window.update()
-            print("Image updated")
-            time.sleep(0.001)
+    img = my_queue.get()
+    start = time.time()
+    imgtk = ImageTk.PhotoImage(image=img)
+    end = time.time()
+    # Clear the existing image from the Canvas
+    canvas.delete("all")
+    
+    # Create a new image item on the Canvas
+    canvas.image = imgtk
+    canvas.create_image(0, 0, anchor=tk.NW, image=canvas.image)
+    print(f"tk time {end - start}")
+    canvas.after(1,update_to_canvas())
 
 def run_threads():
     # Start the thread to receive frames from the server
     receive_thread = threading.Thread(target=get_frame_from_sever)
-    update_thread = threading.Thread(target=update_to_canvas)
     receive_thread.start()
-    update_thread.start()
     # Start the Tkinter event loop
+    update_to_canvas()
     window.mainloop()
 
 run_threads()
