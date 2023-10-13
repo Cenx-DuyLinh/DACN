@@ -1,4 +1,4 @@
-from SeverClientClass.Client2copy import *
+from SeverClientClass.Client3 import *
 
 if __name__ == "__main__":
     HOST_SELF = "127.0.0.1"

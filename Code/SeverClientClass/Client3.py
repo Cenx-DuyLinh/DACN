@@ -1,7 +1,16 @@
 import socket, threading, time, logging, os, io,struct
 import tkinter as tk
-from queue import Queue
+import queue
 from PIL import Image, ImageTk
+class LimitedQueue(queue.Queue):
+    def __init__(self, maxsize):
+        super().__init__(maxsize)
+        self.maxsize = maxsize
+
+    def put(self, item, block=True, timeout=None):
+        if self.full():
+            self.get()  # Remove the oldest item when the queue is full
+        super().put(item, block, timeout)
 class Client:
     def __init__(self, host, port,port_pi):
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -13,11 +22,14 @@ class Client:
         self.host = host
         self.port = port
         self.port_pi = port_pi
-        self.queue_command = Queue()
-        self.queue_camera = Queue()
+        self.queue_command = queue.Queue()
+        self.queue_camera = LimitedQueue(maxsize=20)
+        self.connected_to_sever = False
         self.conn_pi_obj = None
         self.setup_ui()
         self.connect_to_sever()
+        self.count = 0
+        self.image_counter = 0
 
     def setup_ui(self):
         self.window = tk.Tk()
@@ -65,11 +77,16 @@ class Client:
         self.conn_pi.connect((self.host, self.port_pi))
         self.conn_pi_obj = self.conn_pi.makefile('rb')
         self.print_and_write_log("Connected to Camera")
+        
+        self.connected_to_sever = True
     def get_image_from_sever(self):
-        print("thread get is running")
+        # print("thread get is running")
         while True:
+            start = time.time()
             image_len = struct.unpack('<L', self.conn_pi_obj.read(struct.calcsize('<L')))[0]
-            print(image_len)
+            end = time.time()
+            self.image_counter += 1
+            print(f"recieve image number {self.image_counter}, delay: {end - start}")
             if not image_len:
                 break
             # Construct a stream to hold the image data and read the image
@@ -80,19 +97,26 @@ class Client:
             # processing on it
             image_stream.seek(0)
             image = Image.open(image_stream)
-            tk_image = ImageTk.PhotoImage(image)
-            self.queue_camera.put(tk_image)
-            print("put image")
+            
+            self.queue_camera.put(image)
     def update_camera(self):
-        while True:
-            if not self.queue_camera.empty():
-                tk_image = self.queue_camera.get()
-                self.canvas.create_image(0, 0, anchor=tk.NW, image=tk_image)
-                # Keep a reference to the image to prevent it from being garbage collected
-                # self.canvas.image = tk_image
-                self.window.update()
-                print("Image updated")
-                time.sleep(0.001)
+        if self.queue_camera.empty():
+            pass
+        else:
+            img = self.queue_camera.get()
+            start = time.time()
+            imgtk = ImageTk.PhotoImage(image=img)
+            end = time.time()
+            # Clear the existing image from the Canvas
+            self.canvas.delete("all")
+            
+            # Create a new image item on the Canvas
+            self.canvas.image = imgtk
+            self.canvas.create_image(0, 0, anchor=tk.NW, image=self.canvas.image)
+            print(f"tk time {end - start}")
+            self.canvas.after(1,self.update_camera)
+            print(f"Image {self.count} updated, tk time: {end-start}")
+        
 
     def send_message(self):
         while True:
@@ -115,15 +139,10 @@ class Client:
     def start_thread(self):
         thread_send_message = threading.Thread(target=self.send_message, daemon=True)
         thread_get_image = threading.Thread(target=self.get_image_from_sever, daemon=True)
-        thread_update_camera = threading.Thread(target=self.update_camera, daemon=True)
-
         
         thread_send_message.start()
-
         thread_get_image.start()
-        thread_update_camera.start()
 
     def run(self):
         self.start_thread()
         self.window.mainloop()
-

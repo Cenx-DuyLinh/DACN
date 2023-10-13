@@ -8,6 +8,7 @@ import os
 import io 
 import struct
 import picamera
+
 class SplitFrames(object):
     def __init__(self, connection):
         self.connection = connection
@@ -40,7 +41,7 @@ class Server:
         self.host = host
         self.port = port
         self.port_cam = port_cam
-        self.drone_queue = Queue
+        self.drone_queue = Queue()
         self.drone_baudrate = 921600
         self.client_connected = False
         self.drone_connected = False

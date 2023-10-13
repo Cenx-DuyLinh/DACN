@@ -51,17 +51,20 @@ def get_frame_from_sever():
     
 def update_to_canvas():
     img = my_queue.get()
-    start = time.time()
-    imgtk = ImageTk.PhotoImage(image=img)
-    end = time.time()
-    # Clear the existing image from the Canvas
-    canvas.delete("all")
-    
-    # Create a new image item on the Canvas
-    canvas.image = imgtk
-    canvas.create_image(0, 0, anchor=tk.NW, image=canvas.image)
-    print(f"tk time {end - start}")
-    canvas.after(1,update_to_canvas())
+    if img is None: 
+        pass
+    else: 
+        start = time.time()
+        imgtk = ImageTk.PhotoImage(image=img)
+        end = time.time()
+        # Clear the existing image from the Canvas
+        canvas.delete("all")
+        
+        # Create a new image item on the Canvas
+        canvas.image = imgtk
+        canvas.create_image(0, 0, anchor=tk.NW, image=canvas.image)
+        print(f"tk time {end - start}")
+        canvas.after(1,update_to_canvas)
 
 def run_threads():
     # Start the thread to receive frames from the server
