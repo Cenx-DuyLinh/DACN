@@ -23,7 +23,7 @@ class Client:
         self.port = port
         self.port_pi = port_pi
         self.queue_command = queue.Queue()
-        self.queue_camera = LimitedQueue(maxsize=20)
+        self.queue_camera = LimitedQueue(maxsize=5)
         self.connected_to_sever = False
         self.conn_pi_obj = None
         self.setup_ui()
@@ -82,11 +82,9 @@ class Client:
     def get_image_from_sever(self):
         # print("thread get is running")
         while True:
-            start = time.time()
             image_len = struct.unpack('<L', self.conn_pi_obj.read(struct.calcsize('<L')))[0]
-            end = time.time()
             self.image_counter += 1
-            print(f"recieve image number {self.image_counter}, delay: {end - start}")
+            # print(f"recieve image number {self.image_counter}, delay: {end - start}")
             if not image_len:
                 break
             # Construct a stream to hold the image data and read the image
@@ -99,11 +97,12 @@ class Client:
             image = Image.open(image_stream)
             
             self.queue_camera.put(image)
+            time.sleep(0.01)
     def update_camera(self):
-        if self.queue_camera.empty():
-            pass
+        img = self.queue_camera.get()
+        if img is None:
+            return
         else:
-            img = self.queue_camera.get()
             start = time.time()
             imgtk = ImageTk.PhotoImage(image=img)
             end = time.time()
@@ -113,9 +112,10 @@ class Client:
             # Create a new image item on the Canvas
             self.canvas.image = imgtk
             self.canvas.create_image(0, 0, anchor=tk.NW, image=self.canvas.image)
-            print(f"tk time {end - start}")
-            self.canvas.after(1,self.update_camera)
-            print(f"Image {self.count} updated, tk time: {end-start}")
+            # print(f"tk time {end - start}")
+            self.count += 1
+            print(f'cam updated {self.count}')
+            self.canvas.after(100,self.update_camera)
         
 
     def send_message(self):
@@ -145,4 +145,5 @@ class Client:
 
     def run(self):
         self.start_thread()
+        self.update_camera()
         self.window.mainloop()
