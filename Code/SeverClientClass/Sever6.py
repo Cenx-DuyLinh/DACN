@@ -80,8 +80,6 @@ class Server:
             connection.close()
             self.conn_pi.close()
             print('Sent %d images' % output.count)
-    def stream_to_client(self,frame):
-        pass
     def connect_to_drone(self):
         try:
             self.drone = MyMAVlink(
