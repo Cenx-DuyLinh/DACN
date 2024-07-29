@@ -9,7 +9,7 @@ Sơ đồ set up dành cho Sever và Client:
 - **Client:** một máy tính bên ngoài kết nối vô sever
 - **IP của Sever:** 10.8.0.9 (IP này là của OpenVPN)
 
-Client sẽ kết nối vô Sever thông qua hai port 2000 và 5000 (2 port này hiện chỉ đang lấy đại 2 số)
+Client sẽ kết nối vô Sever thông qua hai port 2000 và 5000 (2 port này hiện chỉ đang lấy ngẫu nhiên 2 số)
 
 - **Port 2000:** gửi điều khiển cho drone
 - **Port 5000:** gửi hình ảnh từ drone về ground control station
