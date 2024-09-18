@@ -59,7 +59,7 @@ class MyMAVlink():
             return ProgressStatus.OK
         else: 
             return ProgressStatus.ERROR
-    #---------[Phần Lĩnh thêm vào]----------------------------------------------------------------
+   
     def get_ned_ack(self):
         time_out = 20
         timer = 0
@@ -82,7 +82,7 @@ class MyMAVlink():
             if timer >= time_out:
                 return f"Time out. No POSITION_TARGET_LOCAL_NED received",False
                 
-    #---------------------------------------------------------------------------------------------
+ 
     def command_acknowledge(self):
         time_out = 20
         timer = 0
